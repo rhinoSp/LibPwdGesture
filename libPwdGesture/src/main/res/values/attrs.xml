@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PwdGestureView">
+        <attr name="pgv_column_count" format="integer" />
+        <attr name="pgv_row_count" format="integer" />
+        <attr name="pgv_circle_line_width" format="dimension" />
+        <attr name="pgv_circle_radius" format="dimension" />
+        <attr name="pgv_circle_color" format="color|integer" />
+        <attr name="pgv_circle_select_radius" format="dimension" />
+        <attr name="pgv_circle_select_color" format="color|integer" />
+        <attr name="pgv_line_color" format="color|integer" />
+        <attr name="pgv_line_width" format="dimension" />
+        <attr name="pgv_show_line" format="boolean" />
+    </declare-styleable>
+
+</resources>
+
