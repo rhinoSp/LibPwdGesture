@@ -10,6 +10,7 @@ ext {
     apkVersionCode              = 1
 
     lib_appcompat = 'com.android.support:appcompat-v7:27.0.2'
+    lib_constraint_layout = 'com.android.support.constraint:constraint-layout:1.1.2'
 
 }
 

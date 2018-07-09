@@ -3,7 +3,10 @@
 
     <application>
         <activity
-            android:name="com.rhino.pgv.activity.PwdGestureActivity"
+            android:name="com.rhino.pgv.activity.PwdGestureCreateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.rhino.pgv.activity.PwdGestureInputActivity"
             android:screenOrientation="portrait" />
     </application>
 

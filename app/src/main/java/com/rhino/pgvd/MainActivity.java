@@ -26,22 +26,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-        mBinding.hello.setOnClickListener(new View.OnClickListener() {
+        mBinding.btSetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PwdGestureUtils.build()
+                PwdGestureUtils.create()
                         .setRequestCode(11)
-                        .setRowCount(20)
-                        .setColumnCount(15)
+                        .setRowCount(3)
+                        .setColumnCount(3)
                         .setCircleColor(0xFFAAAAAA)
-                        .setCircleLineWidth(2)
-                        .setCircleRadius(10)
+                        .setCircleLineWidth(1)
+                        .setCircleRadius(38)
                         .setCircleSelectColor(0xFF1bbc9b)
-                        .setCircleSelectRadius(5)
-                        .setShowLine(true)
-                        .setLineWidth(2)
+                        .setCircleSelectRadius(10)
+                        .setLineWidth(1)
                         .setLineColor(0xFF1bbc9b)
+                        .setShowLine(true)
+                        .setAutoMatch(false)
+                        .show(MainActivity.this);
+            }
+        });
+        mBinding.btInputPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PwdGestureUtils.input()
+                        .setRequestCode(11)
+                        .setRowCount(3)
+                        .setColumnCount(3)
+                        .setCircleColor(0xFFAAAAAA)
+                        .setCircleLineWidth(1)
+                        .setCircleRadius(38)
+                        .setCircleSelectColor(0xFF1bbc9b)
+                        .setCircleSelectRadius(10)
+                        .setLineWidth(1)
+                        .setLineColor(0xFF1bbc9b)
+                        .setShowLine(true)
+                        .setAutoMatch(true)
                         .setRightPassword(new int[]{7, 5, 2, 6, 9})
                         .show(MainActivity.this);
             }

@@ -14,7 +14,6 @@ import android.view.View;
 
 import com.rhino.pgv.R;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +62,9 @@ public class PwdGestureView extends View {
     private static final int DEFAULT_LINE_COLOR = 0xFF008888;
     private static final int DEFAULT_CIRCLE_SELECT_RADIUS = 8;  //dp
     private static final int DEFAULT_CIRCLE_SELECT_COLOR = 0xFF008888;
+    private static final int DEFAULT_INPUT_ERROR_COLOR = 0xFFFF0000;
     private static final boolean DEFAULT_SHOW_LINE = true;
+    private static final int DEFAULT_MIN_POINT_COUNT = 4;
     private int mColumnCount = DEFAULT_COLUMN_COUNT;
     private int mRowCount = DEFAULT_ROW_COUNT;
     private int mCircleLineWidth = DEFAULT_CIRCLE_WIDTH;
@@ -73,7 +74,9 @@ public class PwdGestureView extends View {
     private int mLineColor = DEFAULT_LINE_COLOR;
     private float mCircleSelectRadius = DEFAULT_CIRCLE_SELECT_RADIUS;
     private int mCircleSelectColor = DEFAULT_CIRCLE_SELECT_COLOR;
+    private int mInputErrorColor = DEFAULT_INPUT_ERROR_COLOR;
     private boolean mIsShowLine = DEFAULT_SHOW_LINE;
+    private int mMinPointCount = DEFAULT_MIN_POINT_COUNT;
 
     private int mViewHeight;
     private int mViewWidth;
@@ -87,6 +90,12 @@ public class PwdGestureView extends View {
     private float mLastTouchX = 0;
     private float mLastTouchY = 0;
     private boolean mIsMoved = false;
+
+    private static int STATUS_NONE = 1;
+    private static int STATUS_INPUT_RIGHT = 2;
+    private static int STATUS_INPUT_ERROR = 3;
+    private int mInputStatus = STATUS_NONE;
+    private boolean mIsAutoMatch = true;
 
     private OnGestureFinishedListener mOnGestureFinishedListener = null;
 
@@ -140,9 +149,8 @@ public class PwdGestureView extends View {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 getParent().requestDisallowInterceptTouchEvent(true);
-                mRectFSelectPointList.clear();
-                mInputPassword.clear();
                 checkAddSelectPoint(event.getX(), event.getY());
+                resetData();
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -155,8 +163,20 @@ public class PwdGestureView extends View {
                 mIsMoved = false;
                 getParent().requestDisallowInterceptTouchEvent(false);
                 postInvalidate();
-                if (null != mOnGestureFinishedListener) {
-                    mOnGestureFinishedListener.onFinish(this, mInputPassword.toString().equals(mRightPassword.toString()));
+                if (!mRectFSelectPointList.isEmpty()) {
+                    boolean inputRight = mInputPassword.toString().equals(mRightPassword.toString());
+                    if (null != mOnGestureFinishedListener) {
+                        mOnGestureFinishedListener.onGestureFinished(this, inputRight);
+                    }
+                    if (mIsAutoMatch) {
+                        mInputStatus = inputRight ? STATUS_INPUT_RIGHT : STATUS_INPUT_ERROR;
+                        postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                reset();
+                            }
+                        }, 1000);
+                    }
                 }
                 return false;
             default:
@@ -186,6 +206,8 @@ public class PwdGestureView extends View {
                     dip2px(DEFAULT_CIRCLE_SELECT_RADIUS));
             mCircleSelectColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_circle_select_color,
                     DEFAULT_CIRCLE_SELECT_COLOR);
+            mInputErrorColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_input_error_color,
+                    DEFAULT_INPUT_ERROR_COLOR);
             mIsShowLine = typedArray.getBoolean(R.styleable.PwdGestureView_pgv_show_line,
                     DEFAULT_SHOW_LINE);
             typedArray.recycle();
@@ -250,7 +272,11 @@ public class PwdGestureView extends View {
         mCirclePaint.setStrokeWidth(mCircleLineWidth);
         for (int i = 0; i < mRectFPointList.size(); i++) {
             RectF rectF = mRectFPointList.get(i);
-            mCirclePaint.setColor(isSelected(rectF) ? mCircleSelectColor : mCircleColor);
+            if (STATUS_INPUT_ERROR == mInputStatus) {
+                mCirclePaint.setColor(mInputErrorColor);
+            } else {
+                mCirclePaint.setColor(isSelected(rectF) ? mCircleSelectColor : mCircleColor);
+            }
             canvas.drawCircle(mRectFPointList.get(i).centerX(), mRectFPointList.get(i).centerY(), mCircleRadius, mCirclePaint);
         }
     }
@@ -265,6 +291,11 @@ public class PwdGestureView extends View {
             return;
         }
         for (int i = 0; i < mRectFSelectPointList.size(); i++) {
+            if (STATUS_INPUT_ERROR == mInputStatus) {
+                mCircleSelectPaint.setColor(mInputErrorColor);
+            } else {
+                mCircleSelectPaint.setColor(mCircleSelectColor);
+            }
             canvas.drawCircle(mRectFSelectPointList.get(i).centerX(), mRectFSelectPointList.get(i).centerY(), mCircleSelectRadius, mCircleSelectPaint);
         }
     }
@@ -278,7 +309,11 @@ public class PwdGestureView extends View {
         if (mRectFSelectPointList.isEmpty()) {
             return;
         }
-        mLinePaint.setColor(mLineColor);
+        if (STATUS_INPUT_ERROR == mInputStatus) {
+            mLinePaint.setColor(mInputErrorColor);
+        } else {
+            mLinePaint.setColor(mLineColor);
+        }
         mLinePaint.setStrokeWidth(mLineWidth);
         int count = mRectFSelectPointList.size();
         for (int i = 1; i < count; i++) {
@@ -371,9 +406,34 @@ public class PwdGestureView extends View {
      * Get the distance of tow point.
      */
     private double getDistance(float x, float y, float x1, float y1) {
-        double _x = Math.abs(x - x1);
-        double _y = Math.abs(y - y1);
-        return Math.sqrt(_x * _x + _y * _y);
+        double distanceX = Math.abs(x - x1);
+        double distanceY = Math.abs(y - y1);
+        return Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    }
+
+    /**
+     * Reset data.
+     */
+    private void resetData() {
+        mRectFSelectPointList.clear();
+        mInputPassword.clear();
+        mInputStatus = STATUS_NONE;
+    }
+
+    /**
+     * Reset data and invalidate.
+     */
+    public void reset() {
+        resetData();
+        postInvalidate();
+    }
+
+    /**
+     * Show error of input.
+     */
+    public void showInputError() {
+        mInputStatus = STATUS_INPUT_ERROR;
+        postInvalidate();
     }
 
     /**
@@ -468,15 +528,40 @@ public class PwdGestureView extends View {
     }
 
     /**
+     * Set whether auto match.
+     *
+     * @param autoMatch True show
+     */
+    public void setAutoMatch(boolean autoMatch) {
+        this.mIsAutoMatch = autoMatch;
+    }
+
+    /**
+     * Set the min point count.
+     * @param count the min point count
+     */
+    public void setMinPointCount(int count) {
+        this.mMinPointCount = 0 >= count ? DEFAULT_MIN_POINT_COUNT : count;
+    }
+
+    /**
+     * Get the min point count.
+     * @return the min point count
+     */
+    public int getMinPointCount() {
+        return mMinPointCount;
+    }
+
+    /**
      * Set right password.
      *
      * @param realPwd the right password
      */
     public boolean setRightPassword(List<Integer> realPwd) {
-        if (null == realPwd) {
-            return false;
+        this.mRightPassword.clear();
+        if (null != realPwd) {
+            this.mRightPassword.addAll(realPwd);
         }
-        this.mRightPassword = realPwd;
         return true;
     }
 
@@ -485,14 +570,14 @@ public class PwdGestureView extends View {
      *
      * @param rightPwd the right password
      */
-    public void setRightPassword(int[] rightPwd) {
-        if (null == rightPwd || 0 == rightPwd.length) {
-            return;
-        }
+    public boolean setRightPassword(int[] rightPwd) {
         mRightPassword = new ArrayList<>();
-        for (int i = 0; i < rightPwd.length; i++) {
-            mRightPassword.add(rightPwd[i]);
+        if (null != rightPwd) {
+            for (int p : rightPwd) {
+                mRightPassword.add(p);
+            }
         }
+        return true;
     }
 
     /**
@@ -539,11 +624,12 @@ public class PwdGestureView extends View {
     }
 
     public interface OnGestureFinishedListener {
-        void onFinish(PwdGestureView view, boolean right);
-    }
-
-    public static abstract class DefaultOnGestureFinishedListener implements OnGestureFinishedListener, Serializable {
-
+        /**
+         * Call when gesture finished.
+         * @param view PwdGestureView
+         * @param right right or error
+         */
+        void onGestureFinished(PwdGestureView view, boolean right);
     }
 
 }

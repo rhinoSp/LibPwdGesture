@@ -9,6 +9,7 @@
         <attr name="pgv_circle_color" format="color|integer" />
         <attr name="pgv_circle_select_radius" format="dimension" />
         <attr name="pgv_circle_select_color" format="color|integer" />
+        <attr name="pgv_input_error_color" format="color|integer" />
         <attr name="pgv_line_color" format="color|integer" />
         <attr name="pgv_line_width" format="dimension" />
         <attr name="pgv_show_line" format="boolean" />
