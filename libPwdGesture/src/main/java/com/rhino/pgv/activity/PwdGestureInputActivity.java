@@ -1,6 +1,7 @@
 package com.rhino.pgv.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,8 +9,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rhino.pgv.R;
+import com.rhino.pgv.utils.LimitTryCountUtils;
 import com.rhino.pgv.utils.PwdGestureUtils;
 import com.rhino.pgv.view.PwdGestureView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author LuoLin
@@ -28,25 +34,28 @@ public class PwdGestureInputActivity extends AppCompatActivity implements PwdGes
     }
 
     @Override
-    public void onBackPressed() {
-        setResult(Activity.RESULT_OK);
-        super.onBackPressed();
-    }
-
-    @Override
     public void onGestureFinished(PwdGestureView view, boolean right) {
-        if (right) {
-            // TODO
-            showToast("密码正确，" + view.getInputPassword().toString());
+        long limitTime = LimitTryCountUtils.getInstance(getApplicationContext()).limitDuration("pwd_gesture");
+        if (0 < limitTime) {
+            mTvTips.setVisibility(View.VISIBLE);
+            int sec = (int) (limitTime / 1000);
+            int min = sec / 60;
+            if (0 < min) {
+                mTvTips.setText(String.format(Locale.getDefault(), "请%d分钟后再尝试", min));
+            } else {
+                mTvTips.setText(String.format(Locale.getDefault(), "请%d秒后再尝试", sec));
+            }
+        } else if (right) {
+            Intent intent = new Intent();
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         } else {
-            showToast("密码错误！");
+            mTvTips.setVisibility(View.VISIBLE);
             if (view.getMinPointCount() > view.getInputPassword().size()) {
                 mTvTips.setText("请至少连接4个点");
-                mTvTips.setTextColor(0xFFFF0000);
-                mTvTips.setVisibility(View.VISIBLE);
             } else {
-                // TODO
-
+                mTvTips.setText("密码错误");
+                LimitTryCountUtils.getInstance(getApplicationContext()).addTryCount("pwd_gesture");
             }
         }
     }
@@ -61,8 +70,5 @@ public class PwdGestureInputActivity extends AppCompatActivity implements PwdGes
         }
     }
 
-    public void showToast(String msg) {
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-    }
 
 }

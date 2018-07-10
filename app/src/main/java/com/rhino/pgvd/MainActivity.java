@@ -1,5 +1,6 @@
 package com.rhino.pgvd;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,9 @@ import com.rhino.pgv.utils.PwdGestureUtils;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_CREATE_PWD = 1;
+    private static final int REQUEST_CODE_INPUT_PWD = 2;
+
     private ActivityMainBinding mBinding;
 
     @Override
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 PwdGestureUtils.create()
-                        .setRequestCode(11)
+                        .setRequestCode(REQUEST_CODE_CREATE_PWD)
                         .setRowCount(3)
                         .setColumnCount(3)
                         .setCircleColor(0xFFAAAAAA)
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 PwdGestureUtils.input()
-                        .setRequestCode(11)
+                        .setRequestCode(REQUEST_CODE_INPUT_PWD)
                         .setRowCount(3)
                         .setColumnCount(3)
                         .setCircleColor(0xFFAAAAAA)
@@ -70,7 +74,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("RHINO", "requestCode = " + requestCode);
+        switch (requestCode) {
+            case REQUEST_CODE_CREATE_PWD:
+                if (resultCode == Activity.RESULT_OK) {
+                    showToast("密码设置成功");
+                }
+                break;
+            case REQUEST_CODE_INPUT_PWD:
+                if (resultCode == Activity.RESULT_OK) {
+                    showToast("密码正确");
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void showToast(String msg) {

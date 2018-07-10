@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -159,8 +160,8 @@ public class PwdGestureView extends View {
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
                 mIsMoved = false;
+                Log.d("RHINO", "xxxxx");
                 getParent().requestDisallowInterceptTouchEvent(false);
                 postInvalidate();
                 if (!mRectFSelectPointList.isEmpty()) {

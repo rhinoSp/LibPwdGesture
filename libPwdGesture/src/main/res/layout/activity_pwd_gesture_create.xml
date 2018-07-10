@@ -40,8 +40,16 @@
         android:layout_height="0px"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/bt_redraw"
+        app:layout_constraintBottom_toTopOf="@+id/v_bt_top_line"
         app:layout_constraintTop_toBottomOf="@+id/guildline" />
+
+    <View
+        android:id="@+id/v_bt_top_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/bt_redraw" />
 
     <TextView
         android:id="@+id/bt_redraw"
@@ -55,6 +63,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/v_bt_center_line" />
+
+    <View
+        android:id="@+id/v_bt_center_line"
+        android:layout_width="1dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:background="#dddddd"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/bt_redraw"
         app:layout_constraintRight_toLeftOf="@+id/bt_sure" />
 
     <TextView
@@ -68,7 +87,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@+id/bt_redraw"
+        app:layout_constraintLeft_toRightOf="@+id/v_bt_center_line"
         app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
