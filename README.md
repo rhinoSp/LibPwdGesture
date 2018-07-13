@@ -20,6 +20,7 @@ dependencies {
 }
 ```
 ## 3.创建手势密码
+### 1）启动创建手势密码界面
 ```
 // 默认方式，打开默认创建手势密码界面
 PwdGestureUtils.createPwd().show(@NonNull Activity activity);
@@ -27,7 +28,7 @@ PwdGestureUtils.createPwd().show(@NonNull Activity activity);
 // 当然也可以打开自己自定义的activity
 PwdGestureUtils.createPwd().show(@NonNull Activity activity, @NonNull Class<?> cls);
 ```
-### 1）监听创建手势密码返回结果
+### 2）监听创建手势密码返回结果
 ```
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -46,6 +47,40 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 }
 ```
+## 4.验证手势密码
+### 1）启动验证手势密码界面
+```
+// 默认方式，打开默认创建手势密码界面
+PwdGestureUtils.inputPwd().show(@NonNull Activity activity);
+
+// 当然也可以打开自己自定义的activity
+PwdGestureUtils.inputPwd().show(@NonNull Activity activity, @NonNull Class<?> cls);
+```
+### 2）监听创建手势密码返回结果
+```
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    switch (requestCode) {
+        case PwdGestureUtils.Build.REQUEST_CODE_INPUT_PWD:
+            if (resultCode == Activity.RESULT_OK) {
+                // 手势密码验证通过，进入首页
+                showToast("手势密码验证通过");
+                startActivity(new Intent(getApplicationContext(), SecondActivity.class));
+                //finish();
+            } else {
+                showToast("放弃验证");
+            }
+            break;
+        default:
+            break;
+    }
+}
+```
+## 5.更多接口介绍
+* setRequestCode(int requestCode) 自定义requestCode
+* setRowCount(int rowCount) 设置行数
+* setColumnCount(int columnCount) 设置列数
 
 # LibPwdGesture
 The library of password gesture.
