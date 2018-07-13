@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
+ * <p>验证手势密码</p>
+ *
  * @author LuoLin
  * @since Create on 2018/7/9.
  */

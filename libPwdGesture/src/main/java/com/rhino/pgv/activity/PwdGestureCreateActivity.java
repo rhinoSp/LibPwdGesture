@@ -27,6 +27,8 @@ import org.w3c.dom.Text;
 import java.util.Locale;
 
 /**
+ * <p>创建手势密码</p>
+ *
  * @author LuoLin
  * @since Create on 2018/7/6.
  */
