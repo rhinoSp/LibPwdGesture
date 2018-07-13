@@ -1,3 +1,34 @@
+# 一、概述
+这是一个手势密码库，可以直接implementation使用，包含自定义手势密码控件[PwdGestureView.java](https://github.com/rhinoSp/LibPwdGesture/blob/master/libPwdGesture/src/main/java/com/rhino/pgv/view/PwdGestureView.java)，
+以及两个activity，创建手势密码[PwdGestureCreateActivity.java](https://github.com/rhinoSp/LibPwdGesture/blob/master/libPwdGesture/src/main/java/com/rhino/pgv/activity/PwdGestureCreateActivity.java),验证手势密码[PwdGestureInputActivity.java](https://github.com/rhinoSp/LibPwdGesture/blob/master/libPwdGesture/src/main/java/com/rhino/pgv/activity/PwdGestureInputActivity.java)。
+# 二、实现原理
+很简单，就是从左到右，从上到下，一次编号为123456789，手指划过的顺序对应的编号组成手势密码，接下来不说应该也都明白了吧。具体实现方式和逻辑可以自行下载查看，下载链接见本文末尾。
+# 三、使用方法
+## 1.在工程根目录build.gradle增加如下配置：
+```
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+## 2.添加依赖，在app工程目录build.gradle增加如下配置：
+```
+dependencies {
+    implementation 'com.github.rhinoSp:LibPwdGesture:v1.0.0'
+}
+```
+## 3.创建手势密码
+```
+// 默认方式，打开默认创建手势密码界面
+PwdGestureUtils.createPwd().show(Activity activity);
+
+// 当然也可以打开自己自定义的activity
+PwdGestureUtils.createPwd().show(Activity activity, Class<?> cls);
+```
+
+
 # LibPwdGesture
 The library of password gesture.
 
