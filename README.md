@@ -81,6 +81,35 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 * setRequestCode(int requestCode) 自定义requestCode
 * setRowCount(int rowCount) 设置行数
 * setColumnCount(int columnCount) 设置列数
+* setNormalOvalStrokeWidth(int width) 设置未选中圆环宽度
+* setNormalOvalStrokeColor(@ColorInt int color) 设置未选中圆环颜色
+* setNormalOvalStrokeSelectColor(@ColorInt int color) 设置未选中圆环选中时颜色
+* setNormalOvalStrokeErrorColor(@ColorInt int color) 设置未选中圆环匹配失败时颜色
+* setNormalOvalSolidColor(@ColorInt int color) 设置未选中时圆环填充颜色
+* setNormalOvalSolidSelectColor(@ColorInt int color) 设置未选中圆环填充选中时颜色
+* setNormalOvalSolidErrorColor(@ColorInt int color) 设置未选中圆环填充匹配失败时颜色
+* setNormalOvalRadius(int radius) 设置未选中圆环半径
+* setSelectOvalStrokeWidth(int width) 
+* setSelectOvalStrokeColor(@ColorInt int color) 
+* setSelectOvalStrokeErrorColor(@ColorInt int color) 
+* setSelectOvalSolidColor(@ColorInt int color) 
+* setSelectOvalSolidErrorColor(@ColorInt int color)
+* setSelectOvalRadius(int radius)
+* setShowGestureLine(boolean show) 
+* setGestureLineWidth(int width) 
+* setGestureLineColor(@ColorInt int color)
+* setGestureLineErrorColor(@ColorInt int color)
+* setAutoMatch(boolean autoMatch)
+* setAutoResetDelay(int delay)
+* setMinSelectCount(int count)
+* setRightPassword(int[] rightPwd)
+* setActionBarBackgroundColor(@ColorInt int color)
+* setStatusBarBackgroundColor(@ColorInt int color)
+* setTitleBackgroundColor(@ColorInt int color)
+* setTitle(String title)
+* setTitleBackButtonVisible(boolean visible)
+* show(@NonNull Activity activity)
+* show(@NonNull Activity activity, @NonNull Class<?> cls)
 
 # LibPwdGesture
 The library of password gesture.
