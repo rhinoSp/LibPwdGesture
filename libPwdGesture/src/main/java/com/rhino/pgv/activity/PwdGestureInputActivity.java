@@ -95,7 +95,7 @@ public class PwdGestureInputActivity extends FragmentActivity implements PwdGest
                 mTvTips.setText(String.format(Locale.getDefault(), "至少需连接%d个点，请重试", mPwdGestureView.getMinSelectCount()));
             } else {
                 mTvTips.setText("密码错误");
-//                LimitTryCountUtils.getInstance(getApplicationContext()).addTryCount(LIMIT_KEY);
+                LimitTryCountUtils.getInstance(getApplicationContext()).addTryCount(LIMIT_KEY);
             }
         }
     }
