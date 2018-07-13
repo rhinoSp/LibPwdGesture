@@ -22,12 +22,30 @@ dependencies {
 ## 3.创建手势密码
 ```
 // 默认方式，打开默认创建手势密码界面
-PwdGestureUtils.createPwd().show(Activity activity);
+PwdGestureUtils.createPwd().show(@NonNull Activity activity);
 
 // 当然也可以打开自己自定义的activity
-PwdGestureUtils.createPwd().show(Activity activity, Class<?> cls);
+PwdGestureUtils.createPwd().show(@NonNull Activity activity, @NonNull Class<?> cls);
 ```
-
+### 1）监听创建手势密码返回结果
+```
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    switch (requestCode) {
+        case PwdGestureUtils.Build.REQUEST_CODE_CREATE_PWD:
+            if (resultCode == Activity.RESULT_OK) {
+                showToast("手势密码创建成功");
+                mPwdGestureArray = data.getIntArrayExtra(PwdGestureUtils.Build.KEY_RIGHT_PASSWORD);
+            } else {
+                showToast("取消创建");
+            }
+            break;
+        default:
+            break;
+    }
+}
+```
 
 # LibPwdGesture
 The library of password gesture.
