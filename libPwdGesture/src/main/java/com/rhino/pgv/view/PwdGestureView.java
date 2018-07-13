@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * <p>The custom gesture password view.</p>
- *Follow this example:
+ * Follow this example:
  *
  * <pre class="prettyprint">
  * &lt;?xml version="1.0" encoding="utf-8"?&gt</br>
@@ -37,15 +37,7 @@ import java.util.List;
  *          android:layout_height="300dp"
  *          android:background="#1A000000"
  *          app:pgv_column_count="3"
- *          app:pgv_row_count="3"
- *          app:pgv_circle_line_width="2dp"
- *          app:pgv_circle_radius="40dp"
- *          app:pgv_circle_color="#FFAAAAAA"
- *          app:pgv_line_width="2dp"
- *          app:pgv_line_color="#FF008888"
- *          app:pgv_circle_select_radius="10dp"
- *          app:pgv_circle_select_color="#FF008888"
- *          app:pgv_show_line="true""/&gt
+ *          app:pgv_row_count="3"/&gt
  *
  *&lt;/RelativeLayout&gt
  *</pre>
@@ -56,49 +48,66 @@ public class PwdGestureView extends View {
 
     private static final int DEFAULT_COLUMN_COUNT = 3;
     private static final int DEFAULT_ROW_COUNT = 3;
-    private static final int DEFAULT_CIRCLE_WIDTH = 2;  //dp
-    private static final int DEFAULT_CIRCLE_RADIUS = 40;  //dp
-    private static final int DEFAULT_CIRCLE_COLOR = 0xFF888888;
-    private static final int DEFAULT_LINE_WIDTH = 2; //dp
-    private static final int DEFAULT_LINE_COLOR = 0xFF008888;
-    private static final int DEFAULT_CIRCLE_SELECT_RADIUS = 8;  //dp
-    private static final int DEFAULT_CIRCLE_SELECT_COLOR = 0xFF008888;
-    private static final int DEFAULT_INPUT_ERROR_COLOR = 0xFFFF0000;
-    private static final boolean DEFAULT_SHOW_LINE = true;
-    private static final int DEFAULT_MIN_POINT_COUNT = 4;
-    private int mColumnCount = DEFAULT_COLUMN_COUNT;
-    private int mRowCount = DEFAULT_ROW_COUNT;
-    private int mCircleLineWidth = DEFAULT_CIRCLE_WIDTH;
-    private float mCircleRadius = DEFAULT_CIRCLE_RADIUS;
-    private int mCircleColor = DEFAULT_CIRCLE_COLOR;
-    private int mLineWidth = DEFAULT_LINE_WIDTH;
-    private int mLineColor = DEFAULT_LINE_COLOR;
-    private float mCircleSelectRadius = DEFAULT_CIRCLE_SELECT_RADIUS;
-    private int mCircleSelectColor = DEFAULT_CIRCLE_SELECT_COLOR;
-    private int mInputErrorColor = DEFAULT_INPUT_ERROR_COLOR;
-    private boolean mIsShowLine = DEFAULT_SHOW_LINE;
-    private int mMinPointCount = DEFAULT_MIN_POINT_COUNT;
+
+    private static final int DEFAULT_NORMAL_OVAL_STROKE_WIDTH = 3;
+    private static final int DEFAULT_NORMAL_OVAL_STROKE_COLOR = 0xFFAAAAAA;
+    private static final int DEFAULT_NORMAL_OVAL_SOLID_COLOR = 0x00000000;
+    private static final int DEFAULT_NORMAL_OVAL_RADIUS = 90;
+    private static final int DEFAULT_SELECT_OVAL_STROKE_WIDTH = 3;
+    private static final int DEFAULT_SELECT_OVAL_STROKE_COLOR = 0xFF1BBC9B;
+    private static final int DEFAULT_SELECT_OVAL_SOLID_COLOR = 0xFF1BBC9B;
+    private static final int DEFAULT_SELECT_OVAL_RADIUS = 24;
+    private static final boolean DEFAULT_SHOW_GESTURE_LINE = true;
+    private static final int DEFAULT_GESTURE_LINE_WIDTH = 3;
+    private static final int DEFAULT_GESTURE_LINE_COLOR = 0xFF1BBC9B;
+    private static final boolean DEFAULT_AUTO_MATCH = false;
+    private static final int DEFAULT_AUTO_RESET_DELAY = 1000;
+    private static final int DEFAULT_MATCH_FAILED_COLOR = 0xFFFF0000;
+    private static final int DEFAULT_MIN_SELECT_COUNT = 4;
+    private int mColumnCount;
+    private int mRowCount;
+    private int mNormalOvalStrokeWidth;
+    private int mNormalOvalStrokeColor;
+    private int mNormalOvalSolidColor;
+    private float mNormalOvalRadius;
+    private int mSelectOvalStrokeWidth;
+    private int mSelectOvalStrokeColor;
+    private int mSelectOvalSolidColor;
+    private float mSelectOvalRadius;
+    private boolean mShowGestureLine;
+    private int mGestureLineWidth;
+    private int mGestureLineColor;
+    private boolean mAutoMatch;
+    private int mAutoResetDelay;
+    private int mMatchFailedColor;
+    private int mMinSelectCount;
+
+    private static final int MATCH_STATUS_NONE = 1;
+    private static final int MATCH_STATUS_MATCH_SUCCESS = 2;
+    private static final int MATCH_STATUS_MATCH_FAILED = 3;
+    private int mMatchStatus = MATCH_STATUS_NONE;
 
     private int mViewHeight;
     private int mViewWidth;
-    private Paint mCirclePaint;
-    private Paint mCircleSelectPaint;
-    private Paint mLinePaint;
+    private Paint mNormalOvalPaint;
+    private Paint mSelectOvalPaint;
+    private Paint mGestureLinePaint;
     private List<RectF> mRectFPointList = new ArrayList<>();
     private List<RectF> mRectFSelectPointList = new ArrayList<>();
-    private List<Integer> mRightPassword = new ArrayList<>();
-    private List<Integer> mInputPassword = new ArrayList<>();
     private float mLastTouchX = 0;
     private float mLastTouchY = 0;
-    private boolean mIsMoved = false;
+    private boolean mMoving = false;
 
-    private static int STATUS_NONE = 1;
-    private static int STATUS_INPUT_RIGHT = 2;
-    private static int STATUS_INPUT_ERROR = 3;
-    private int mInputStatus = STATUS_NONE;
-    private boolean mIsAutoMatch = true;
+    private List<Integer> mRightPassword = new ArrayList<>();
+    private List<Integer> mInputPassword = new ArrayList<>();
+    private OnGestureChangedListener mOnGestureChangedListener = null;
 
-    private OnGestureFinishedListener mOnGestureFinishedListener = null;
+    private Runnable mAutoResetRunnable = new Runnable() {
+        @Override
+        public void run() {
+            reset();
+        }
+    };
 
     public PwdGestureView(Context context) {
         this(context, null);
@@ -137,10 +146,10 @@ public class PwdGestureView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawGridCirclePoint(canvas);
-        drawSelectCircle(canvas);
-        if (mIsShowLine) {
-            drawLine(canvas);
+        drawNormalOval(canvas);
+        drawSelectOval(canvas);
+        if (mShowGestureLine) {
+            drawGestureLine(canvas);
         }
     }
 
@@ -149,34 +158,36 @@ public class PwdGestureView extends View {
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                removeCallbacks(mAutoResetRunnable);
                 getParent().requestDisallowInterceptTouchEvent(true);
                 checkAddSelectPoint(event.getX(), event.getY());
+                if (!mRectFSelectPointList.isEmpty() && null != mOnGestureChangedListener) {
+                    mOnGestureChangedListener.onGestureStarted(this);
+                }
                 resetData();
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
-                mIsMoved = true;
-                checkAddSelectPoint(event.getX(), event.getY());
+                mMoving = true;
+                if (checkAddSelectPoint(event.getX(), event.getY())) {
+                    if (null != mOnGestureChangedListener) {
+                        mOnGestureChangedListener.onGestureMoving(this);
+                    }
+                }
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                mIsMoved = false;
-                Log.d("RHINO", "xxxxx");
+                mMoving = false;
                 getParent().requestDisallowInterceptTouchEvent(false);
                 postInvalidate();
                 if (!mRectFSelectPointList.isEmpty()) {
                     boolean inputRight = mInputPassword.toString().equals(mRightPassword.toString());
-                    if (null != mOnGestureFinishedListener) {
-                        mOnGestureFinishedListener.onGestureFinished(this, inputRight);
+                    if (null != mOnGestureChangedListener) {
+                        mOnGestureChangedListener.onGestureFinished(this, inputRight);
                     }
-                    if (mIsAutoMatch) {
-                        mInputStatus = inputRight ? STATUS_INPUT_RIGHT : STATUS_INPUT_ERROR;
-                        postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                reset();
-                            }
-                        }, 1000);
+                    if (mAutoMatch) {
+                        mMatchStatus = inputRight ? MATCH_STATUS_MATCH_SUCCESS : MATCH_STATUS_MATCH_FAILED;
+                        postDelayed(mAutoResetRunnable, mAutoResetDelay);
                     }
                 }
                 return false;
@@ -193,40 +204,48 @@ public class PwdGestureView extends View {
                     DEFAULT_COLUMN_COUNT);
             mRowCount = typedArray.getInt(R.styleable.PwdGestureView_pgv_row_count,
                     DEFAULT_ROW_COUNT);
-            mCircleLineWidth = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_circle_line_width,
-                    dip2px(DEFAULT_CIRCLE_WIDTH));
-            mCircleRadius = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_circle_radius,
-                    dip2px(DEFAULT_CIRCLE_RADIUS));
-            mCircleColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_circle_color,
-                    DEFAULT_CIRCLE_COLOR);
-            mLineWidth = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_line_width,
-                    dip2px(DEFAULT_LINE_WIDTH));
-            mLineColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_line_color,
-                    DEFAULT_LINE_COLOR);
-            mCircleSelectRadius = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_circle_select_radius,
-                    dip2px(DEFAULT_CIRCLE_SELECT_RADIUS));
-            mCircleSelectColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_circle_select_color,
-                    DEFAULT_CIRCLE_SELECT_COLOR);
-            mInputErrorColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_input_error_color,
-                    DEFAULT_INPUT_ERROR_COLOR);
-            mIsShowLine = typedArray.getBoolean(R.styleable.PwdGestureView_pgv_show_line,
-                    DEFAULT_SHOW_LINE);
+            mNormalOvalStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_normal_oval_stroke_width,
+                    DEFAULT_NORMAL_OVAL_STROKE_WIDTH);
+            mNormalOvalStrokeColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_normal_oval_stroke_color,
+                    DEFAULT_NORMAL_OVAL_STROKE_COLOR);
+            mNormalOvalSolidColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_normal_oval_solid_color,
+                    DEFAULT_NORMAL_OVAL_SOLID_COLOR);
+            mNormalOvalRadius = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_normal_oval_radius,
+                    DEFAULT_NORMAL_OVAL_RADIUS);
+            mSelectOvalStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_select_oval_stroke_width,
+                    DEFAULT_SELECT_OVAL_STROKE_WIDTH);
+            mSelectOvalStrokeColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_select_oval_stroke_color,
+                    DEFAULT_SELECT_OVAL_STROKE_COLOR);
+            mSelectOvalSolidColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_select_oval_solid_color,
+                    DEFAULT_SELECT_OVAL_SOLID_COLOR);
+            mSelectOvalRadius = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_select_oval_radius,
+                    DEFAULT_SELECT_OVAL_RADIUS);
+            mMatchFailedColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_match_failed_color,
+                    DEFAULT_MATCH_FAILED_COLOR);
+            mShowGestureLine = typedArray.getBoolean(R.styleable.PwdGestureView_pgv_show_gesture_line,
+                    DEFAULT_SHOW_GESTURE_LINE);
+            mGestureLineWidth = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_line_width,
+                    DEFAULT_GESTURE_LINE_WIDTH);
+            mGestureLineColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_line_color,
+                    DEFAULT_GESTURE_LINE_COLOR);
+            mAutoMatch = typedArray.getBoolean(R.styleable.PwdGestureView_pgv_auto_match,
+                    DEFAULT_AUTO_MATCH);
+            mAutoResetDelay = typedArray.getInt(R.styleable.PwdGestureView_pgv_auto_reset_delay,
+                    DEFAULT_AUTO_RESET_DELAY);
+            mMinSelectCount = typedArray.getInt(R.styleable.PwdGestureView_pgv_min_select_count,
+                    DEFAULT_MIN_SELECT_COUNT);
             typedArray.recycle();
         }
-        mCirclePaint = new Paint();
-        mCirclePaint.setAntiAlias(true);
-        mCirclePaint.setStyle(Paint.Style.STROKE);
-        mCirclePaint.setColor(mCircleColor);
+        mNormalOvalPaint = new Paint();
+        mNormalOvalPaint.setAntiAlias(true);
 
-        mCircleSelectPaint = new Paint();
-        mCircleSelectPaint.setAntiAlias(true);
-        mCircleSelectPaint.setStyle(Paint.Style.FILL);
-        mCircleSelectPaint.setColor(mCircleSelectColor);
+        mSelectOvalPaint = new Paint();
+        mSelectOvalPaint.setAntiAlias(true);
 
-        mLinePaint = new Paint();
-        mLinePaint.setAntiAlias(true);
-        mLinePaint.setStyle(Paint.Style.FILL);
-        mLinePaint.setColor(mLineColor);
+        mGestureLinePaint = new Paint();
+        mGestureLinePaint.setAntiAlias(true);
+        mGestureLinePaint.setStyle(Paint.Style.FILL);
+        mGestureLinePaint.setColor(mGestureLineColor);
     }
 
     /**
@@ -265,67 +284,96 @@ public class PwdGestureView extends View {
     }
 
     /**
-     * Draw the grid circle point.
+     * Draw the normal oval.
      *
      * @param canvas Canvas
      */
-    private void drawGridCirclePoint(Canvas canvas) {
-        mCirclePaint.setStrokeWidth(mCircleLineWidth);
+    private void drawNormalOval(Canvas canvas) {
         for (int i = 0; i < mRectFPointList.size(); i++) {
-            RectF rectF = mRectFPointList.get(i);
-            if (STATUS_INPUT_ERROR == mInputStatus) {
-                mCirclePaint.setColor(mInputErrorColor);
-            } else {
-                mCirclePaint.setColor(isSelected(rectF) ? mCircleSelectColor : mCircleColor);
+            if (mNormalOvalStrokeWidth != 0 && mNormalOvalStrokeColor != 0) {
+                mNormalOvalPaint.setStyle(Paint.Style.STROKE);
+                mNormalOvalPaint.setStrokeWidth(mNormalOvalStrokeWidth);
+                if (MATCH_STATUS_MATCH_FAILED == mMatchStatus) {
+                    mNormalOvalPaint.setColor(mMatchFailedColor);
+                } else {
+                    mNormalOvalPaint.setColor(isSelected(mRectFPointList.get(i)) ? mGestureLineColor : mNormalOvalStrokeColor);
+                }
+                canvas.drawCircle(mRectFPointList.get(i).centerX(), mRectFPointList.get(i).centerY(), mNormalOvalRadius, mNormalOvalPaint);
             }
-            canvas.drawCircle(mRectFPointList.get(i).centerX(), mRectFPointList.get(i).centerY(), mCircleRadius, mCirclePaint);
+
+            if (mNormalOvalSolidColor != 0) {
+                mNormalOvalPaint.setStyle(Paint.Style.FILL);
+                if (MATCH_STATUS_MATCH_FAILED == mMatchStatus) {
+                    mNormalOvalPaint.setColor(mMatchFailedColor);
+                } else {
+                    mNormalOvalPaint.setColor(isSelected(mRectFPointList.get(i)) ? mGestureLineColor : mNormalOvalSolidColor);
+                }
+                canvas.drawCircle(mRectFPointList.get(i).centerX(), mRectFPointList.get(i).centerY(),
+                        mNormalOvalRadius - mNormalOvalStrokeWidth / 2, mNormalOvalPaint);
+            }
         }
     }
 
     /**
-     * Draw the circle which select.
+     * Draw the select oval.
      *
      * @param canvas Canvas
      */
-    private void drawSelectCircle(Canvas canvas) {
+    private void drawSelectOval(Canvas canvas) {
         if (mRectFSelectPointList.isEmpty()) {
             return;
         }
         for (int i = 0; i < mRectFSelectPointList.size(); i++) {
-            if (STATUS_INPUT_ERROR == mInputStatus) {
-                mCircleSelectPaint.setColor(mInputErrorColor);
-            } else {
-                mCircleSelectPaint.setColor(mCircleSelectColor);
+            if (mSelectOvalStrokeWidth != 0 && mSelectOvalStrokeColor != 0) {
+                mSelectOvalPaint.setStyle(Paint.Style.STROKE);
+                mSelectOvalPaint.setStrokeWidth(mSelectOvalStrokeWidth);
+                if (MATCH_STATUS_MATCH_FAILED == mMatchStatus) {
+                    mSelectOvalPaint.setColor(mMatchFailedColor);
+                } else {
+                    mSelectOvalPaint.setColor(mSelectOvalStrokeColor);
+                }
+                canvas.drawCircle(mRectFSelectPointList.get(i).centerX(), mRectFSelectPointList.get(i).centerY(), mSelectOvalRadius, mSelectOvalPaint);
             }
-            canvas.drawCircle(mRectFSelectPointList.get(i).centerX(), mRectFSelectPointList.get(i).centerY(), mCircleSelectRadius, mCircleSelectPaint);
+
+            if (mSelectOvalSolidColor != 0) {
+                mSelectOvalPaint.setStyle(Paint.Style.FILL);
+                if (MATCH_STATUS_MATCH_FAILED == mMatchStatus) {
+                    mSelectOvalPaint.setColor(mMatchFailedColor);
+                } else {
+                    mSelectOvalPaint.setColor(mSelectOvalSolidColor);
+                }
+                canvas.drawCircle(mRectFSelectPointList.get(i).centerX(), mRectFSelectPointList.get(i).centerY(),
+                        mSelectOvalRadius - mSelectOvalStrokeWidth / 2, mSelectOvalPaint);
+            }
         }
     }
 
     /**
-     * Draw line between select points.
+     * Draw gesture line.
      *
      * @param canvas Canvas
      */
-    private void drawLine(Canvas canvas) {
+    private void drawGestureLine(Canvas canvas) {
         if (mRectFSelectPointList.isEmpty()) {
             return;
         }
-        if (STATUS_INPUT_ERROR == mInputStatus) {
-            mLinePaint.setColor(mInputErrorColor);
+        if (MATCH_STATUS_MATCH_FAILED == mMatchStatus) {
+            mGestureLinePaint.setColor(mMatchFailedColor);
         } else {
-            mLinePaint.setColor(mLineColor);
+            mGestureLinePaint.setColor(mGestureLineColor);
         }
-        mLinePaint.setStrokeWidth(mLineWidth);
+        mGestureLinePaint.setStrokeWidth(mGestureLineWidth);
+        float mOuterOvalRadius = Math.max(mNormalOvalRadius, mSelectOvalRadius);
         int count = mRectFSelectPointList.size();
         for (int i = 1; i < count; i++) {
             RectF rectLast = mRectFSelectPointList.get(i - 1);
             RectF rect = mRectFSelectPointList.get(i);
-            drawLineBetweenCircle(rectLast.centerX(), rectLast.centerY(), rect.centerX(), rect.centerY(), mCircleRadius, canvas, false);
+            drawLineBetweenCircle(rectLast.centerX(), rectLast.centerY(), rect.centerX(), rect.centerY(), mOuterOvalRadius, canvas, false);
         }
 
-        if (mIsMoved) {
+        if (mMoving) {
             RectF rectEnd = mRectFSelectPointList.get(count - 1);
-            drawLineBetweenCircle(rectEnd.centerX(), rectEnd.centerY(), mLastTouchX, mLastTouchY, mCircleRadius, canvas, true);
+            drawLineBetweenCircle(rectEnd.centerX(), rectEnd.centerY(), mLastTouchX, mLastTouchY, mOuterOvalRadius, canvas, true);
         }
     }
 
@@ -347,9 +395,9 @@ public class PwdGestureView extends View {
         float xPoint2 = x1 < x2 ? x2 - distanceX : x2 + distanceX;
         float yPoint2 = y1 < y2 ? y2 - distanceY : y2 + distanceY;
         if (isLast) {
-            canvas.drawLine(xPoint1, yPoint1, x2, y2, mLinePaint);
+            canvas.drawLine(xPoint1, yPoint1, x2, y2, mGestureLinePaint);
         } else {
-            canvas.drawLine(xPoint1, yPoint1, xPoint2, yPoint2, mLinePaint);
+            canvas.drawLine(xPoint1, yPoint1, xPoint2, yPoint2, mGestureLinePaint);
         }
     }
 
@@ -365,7 +413,11 @@ public class PwdGestureView extends View {
         mLastTouchY = y;
         for (int i = 0; i < mRectFPointList.size(); i++) {
             RectF rect = mRectFPointList.get(i);
-            if (getDistance(rect.centerX(), rect.centerY(), x, y) <= mCircleRadius) {
+            float mOuterOvalRadius = Math.max(mNormalOvalRadius, mSelectOvalRadius);
+            if (mOuterOvalRadius < DEFAULT_NORMAL_OVAL_RADIUS) {
+                mOuterOvalRadius = DEFAULT_NORMAL_OVAL_RADIUS;
+            }
+            if (getDistance(rect.centerX(), rect.centerY(), x, y) <= mOuterOvalRadius) {
                 // valid distance
                 if (!mRectFSelectPointList.contains(rect)) {
                     mRectFSelectPointList.add(rect);
@@ -380,6 +432,7 @@ public class PwdGestureView extends View {
 
     /**
      * Return whether selected.
+     *
      * @param rectF RectF
      * @return true selected, false unselected
      */
@@ -390,17 +443,6 @@ public class PwdGestureView extends View {
             }
         }
         return false;
-    }
-
-    /**
-     * dp convert to px.
-     *
-     * @param dpValue the dp value
-     * @return the px value
-     */
-    private int dip2px(float dpValue) {
-        final float scale = getContext().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
     }
 
     /**
@@ -418,7 +460,7 @@ public class PwdGestureView extends View {
     private void resetData() {
         mRectFSelectPointList.clear();
         mInputPassword.clear();
-        mInputStatus = STATUS_NONE;
+        mMatchStatus = MATCH_STATUS_NONE;
     }
 
     /**
@@ -430,161 +472,205 @@ public class PwdGestureView extends View {
     }
 
     /**
-     * Show error of input.
+     * Show match failed view.
      */
-    public void showInputError() {
-        mInputStatus = STATUS_INPUT_ERROR;
+    public void showMatchFailedView() {
+        mMatchStatus = MATCH_STATUS_MATCH_FAILED;
         postInvalidate();
-    }
-
-    /**
-     * Set the count of column.
-     *
-     * @param columnCount the count of column
-     */
-    public void setColumnCount(int columnCount) {
-        this.mColumnCount = columnCount <= 0 ? DEFAULT_COLUMN_COUNT : columnCount;
     }
 
     /**
      * Set the count of row.
      *
-     * @param rowCount the count of row
+     * @param rowCount the count of row.
      */
     public void setRowCount(int rowCount) {
         this.mRowCount = rowCount <= 0 ? DEFAULT_ROW_COUNT : rowCount;
     }
 
     /**
-     * Set the width of circle line.
+     * Set the count of column.
      *
-     * @param width the width of circle line(dp)
+     * @param columnCount the count of column.
      */
-    public void setCircleLineWidth(int width) {
-        this.mCircleLineWidth = width <= 0 ? dip2px(DEFAULT_CIRCLE_WIDTH) : dip2px(width);
+    public void setColumnCount(int columnCount) {
+        this.mColumnCount = columnCount <= 0 ? DEFAULT_COLUMN_COUNT : columnCount;
     }
 
     /**
-     * Set the radius of circle line.
+     * Set the stroke width of normal oval.
      *
-     * @param radius the radius of circle line(dp)
+     * @param width the stroke width of normal oval.
      */
-    public void setCircleRadius(int radius) {
-        this.mCircleRadius = radius <= 0 ? dip2px(DEFAULT_CIRCLE_RADIUS) : dip2px(radius);
+    public void setNormalOvalStrokeWidth(int width) {
+        this.mNormalOvalStrokeWidth = width;
     }
 
     /**
-     * Set the color of circle.
+     * Set the stroke color of normal oval.
      *
-     * @param color the color of circle
+     * @param color the stroke color of normal oval.
      */
-    public void setCircleColor(@ColorInt int color) {
-        this.mCircleColor = color == 0 ? DEFAULT_CIRCLE_COLOR : color;
+    public void setNormalOvalStrokeColor(@ColorInt int color) {
+        this.mNormalOvalStrokeColor = color;
     }
 
     /**
-     * Set the width of line.
+     * Set the solid color of normal oval.
      *
-     * @param width the color of line(dp)
+     * @param color the solid color of normal oval.
      */
-    public void setLineWidth(int width) {
-        this.mLineWidth = width <= 0 ? dip2px(DEFAULT_LINE_WIDTH) : dip2px(width);
+    public void setNormalOvalSolidColor(@ColorInt int color) {
+        this.mNormalOvalSolidColor = color;
     }
 
     /**
-     * Set the color of line.
+     * Set the radius of of normal oval.
      *
-     * @param color the color of line
+     * @param radius the radius of of normal oval.
      */
-    public void setLineColor(@ColorInt int color) {
-        this.mLineColor = color == 0 ? DEFAULT_LINE_COLOR : color;
+    public void setNormalOvalRadius(int radius) {
+        this.mNormalOvalRadius = radius;
     }
 
     /**
-     * Set the radius of select circle.
+     * Set the stroke width of select oval.
      *
-     * @param radius the radius of select circle(dp)
+     * @param width the stroke width of select oval.
      */
-    public void setCircleSelectRadius(float radius) {
-        this.mCircleSelectRadius = radius <= 0 ? dip2px(DEFAULT_CIRCLE_SELECT_RADIUS) : dip2px(radius);
+    public void setSelectOvalStrokeWidth(int width) {
+        this.mSelectOvalStrokeWidth = width;
     }
 
     /**
-     * Set the color of select circle.
+     * Set the stroke color of select oval.
      *
-     * @param color the color of select circle
+     * @param color the stroke color of select oval.
      */
-    public void setCircleSelectColor(@ColorInt int color) {
-        this.mCircleSelectColor = color == 0 ? DEFAULT_CIRCLE_SELECT_COLOR : color;
+    public void setSelectOvalStrokeColor(@ColorInt int color) {
+        this.mSelectOvalStrokeColor = color;
     }
 
     /**
-     * Set whether show line.
+     * Set the solid color of select oval.
      *
-     * @param show True show
+     * @param color the solid color of select oval.
      */
-    public void setShowLine(boolean show) {
-        this.mIsShowLine = show;
+    public void setSelectOvalSolidColor(@ColorInt int color) {
+        this.mSelectOvalSolidColor = color;
+    }
+
+    /**
+     * Set the radius of of select oval.
+     *
+     * @param radius the radius of of select oval.
+     */
+    public void setSelectOvalRadius(float radius) {
+        this.mSelectOvalRadius = radius;
+    }
+
+    /**
+     * Set show gesture line.
+     *
+     * @param show True show.
+     */
+    public void setShowGestureLine(boolean show) {
+        this.mShowGestureLine = show;
         postInvalidate();
+    }
+
+    /**
+     * Set the width of gesture line.
+     *
+     * @param width the color of gesture line.
+     */
+    public void setGestureLineWidth(int width) {
+        this.mGestureLineWidth = width;
+    }
+
+    /**
+     * Set the color of gesture line.
+     *
+     * @param color the color of gesture line.
+     */
+    public void setGestureLineColor(@ColorInt int color) {
+        this.mGestureLineColor = color;
     }
 
     /**
      * Set whether auto match.
      *
-     * @param autoMatch True show
+     * @param autoMatch True show.
      */
     public void setAutoMatch(boolean autoMatch) {
-        this.mIsAutoMatch = autoMatch;
+        this.mAutoMatch = autoMatch;
     }
 
     /**
-     * Set the min point count.
-     * @param count the min point count
+     * Set delay (in milliseconds) of reset when gesture not match.
+     *
+     * @param delay The delay (in milliseconds) of reset when gesture not match.
      */
-    public void setMinPointCount(int count) {
-        this.mMinPointCount = 0 >= count ? DEFAULT_MIN_POINT_COUNT : count;
+    public void setAutoResetDelay(int delay) {
+        this.mAutoResetDelay = delay;
     }
 
     /**
-     * Get the min point count.
-     * @return the min point count
+     * Set the color when match failed.
+     * @param color the color when match failed.
      */
-    public int getMinPointCount() {
-        return mMinPointCount;
+    public void setMatchFailedColor(@ColorInt int color) {
+        this.mMatchFailedColor = color;
+    }
+
+    /**
+     * Set the min select count.
+     *
+     * @param count the min select count.
+     */
+    public void setMinSelectCount(int count) {
+        this.mMinSelectCount = count;
+    }
+
+    /**
+     * Get the min select count.
+     *
+     * @return the min select count.
+     */
+    public int getMinSelectCount() {
+        return mMinSelectCount;
     }
 
     /**
      * Set right password.
      *
-     * @param realPwd the right password
+     * @param rightPwd the right password.
      */
-    public boolean setRightPassword(List<Integer> realPwd) {
+    public void setRightPassword(List<Integer> rightPwd) {
         this.mRightPassword.clear();
-        if (null != realPwd) {
-            this.mRightPassword.addAll(realPwd);
+        if (null != rightPwd) {
+            this.mRightPassword.addAll(rightPwd);
         }
-        return true;
     }
 
     /**
      * Set right password.
      *
-     * @param rightPwd the right password
+     * @param rightPwd the right password.
      */
-    public boolean setRightPassword(int[] rightPwd) {
+    public void setRightPassword(int[] rightPwd) {
         mRightPassword = new ArrayList<>();
         if (null != rightPwd) {
             for (int p : rightPwd) {
                 mRightPassword.add(p);
             }
         }
-        return true;
     }
 
     /**
      * Get right password.
      *
-     * @return the right password
+     * @return the right password.
      */
     @NonNull
     public List<Integer> getRightPassword() {
@@ -594,7 +680,7 @@ public class PwdGestureView extends View {
     /**
      * Get right password.
      *
-     * @return the right password
+     * @return the right password.
      */
     @NonNull
     public int[] getRightPasswordArray() {
@@ -608,7 +694,7 @@ public class PwdGestureView extends View {
     /**
      * Get input password.
      *
-     * @return the input password
+     * @return the input password.
      */
     @NonNull
     public List<Integer> getInputPassword() {
@@ -616,21 +702,37 @@ public class PwdGestureView extends View {
     }
 
     /**
-     * Register a callback to be invoked when gesture finished.
+     * Register a callback to be invoked when gesture changed.
      *
-     * @param listener the callback to call when gesture finished
+     * @param listener the callback to call when gesture finished.
      */
-    public void setOnGestureFinishedListener(OnGestureFinishedListener listener) {
-        this.mOnGestureFinishedListener = listener;
+    public void setOnGestureChangedListener(OnGestureChangedListener listener) {
+        this.mOnGestureChangedListener = listener;
     }
 
-    public interface OnGestureFinishedListener {
+    public interface OnGestureChangedListener {
         /**
-         * Call when gesture finished.
-         * @param view PwdGestureView
-         * @param right right or error
+         * Invoked when gesture started.
+         *
+         * @param view PwdGestureView.
+         */
+        void onGestureStarted(PwdGestureView view);
+
+        /**
+         * Invoked when gesture moving.
+         *
+         * @param view PwdGestureView.
+         */
+        void onGestureMoving(PwdGestureView view);
+
+        /**
+         * Invoked when gesture finished.
+         *
+         * @param view  PwdGestureView.
+         * @param right right or error.
          */
         void onGestureFinished(PwdGestureView view, boolean right);
+
     }
 
 }

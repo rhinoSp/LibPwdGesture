@@ -7,18 +7,32 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/bt_set_password"
+            android:id="@+id/bt_set_password1"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center"
-            android:text="set password" />
+            android:text="设置手势密码1" />
+
+        <Button
+            android:id="@+id/bt_set_password2"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="设置手势密码2" />
+
+        <Button
+            android:id="@+id/bt_set_password3"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="设置手势密码3" />
 
         <Button
             android:id="@+id/bt_input_password"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center"
-            android:text="input password" />
+            android:text="验证手势密码" />
 
     </LinearLayout>
 

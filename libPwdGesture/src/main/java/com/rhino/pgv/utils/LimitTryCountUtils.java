@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 
 /**
- * <p>限制执行次数</p>
+ * <p>The utils of limiting for trying.</p>
  *
  * @author LuoLin
  * @since Create on 2018/5/11.
@@ -13,11 +13,11 @@ import android.content.SharedPreferences;
 public class LimitTryCountUtils {
 
     private static final String FILE_NAME = "limit_try_count";
-    private static final String KEY_TRY_COUNT = "try.count";
-    private static final String KEY_LOCK_TIMESTAMP = "lock.timestamp";
-    private static final String KEY_NEXT_TRY_TIMESTAMP = "next.try.timestamp";
+    private static final String KEY_TRY_COUNT = "key_try_count";
+    private static final String KEY_LOCK_TIMESTAMP = "key_lock_timestamp";
+    private static final String KEY_NEXT_TRY_TIMESTAMP = "key_next_try_timestamp";
     private static final int DEFAULT_MAX_TRY_COUNT = 5;
-    private static final long DEFAULT_LIMIT_DURATION = 5 * 60 * 1000;
+    private static final long DEFAULT_LIMIT_DURATION = 5 * 60 * 1000 + 1000;
     private long mLimitDuration = DEFAULT_LIMIT_DURATION;
     private int mMaxTryCount = DEFAULT_MAX_TRY_COUNT;
     private SharedPreferences mSharedPreferences;
@@ -34,29 +34,39 @@ public class LimitTryCountUtils {
         this.mSharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
     }
 
+    private String buildKey(String keyPrefix, String key) {
+        return keyPrefix + "_" + key;
+    }
+
     public void addTryCount(String key) {
-        int tryCount = mSharedPreferences.getInt(KEY_TRY_COUNT + "_" + key, 0);
+        int tryCount = mSharedPreferences.getInt(buildKey(KEY_TRY_COUNT, key), 0);
         tryCount++;
         if (tryCount >= mMaxTryCount) {
             long curTimestamp = System.currentTimeMillis();
             long nextTryTimestamp = curTimestamp + mLimitDuration;
-            mSharedPreferences.edit().putLong(KEY_LOCK_TIMESTAMP + "_" + key, curTimestamp).apply();
-            mSharedPreferences.edit().putLong(KEY_NEXT_TRY_TIMESTAMP + "_" + key, nextTryTimestamp).apply();
+            mSharedPreferences.edit().putLong(buildKey(KEY_LOCK_TIMESTAMP, key), curTimestamp).apply();
+            mSharedPreferences.edit().putLong(buildKey(KEY_NEXT_TRY_TIMESTAMP, key), nextTryTimestamp).apply();
         }
-        mSharedPreferences.edit().putInt(KEY_TRY_COUNT + "_" + key, tryCount).apply();
+        mSharedPreferences.edit().putInt(buildKey(KEY_TRY_COUNT, key), tryCount).apply();
     }
 
     public long limitDuration(String key) {
-        long nextTryTimestamp = mSharedPreferences.getLong(KEY_NEXT_TRY_TIMESTAMP + "_" + key, 0);
+        long nextTryTimestamp = mSharedPreferences.getLong(buildKey(KEY_NEXT_TRY_TIMESTAMP, key), 0);
         long limitTime = nextTryTimestamp - System.currentTimeMillis();
         if (0 < limitTime) {
-            mSharedPreferences.edit().putInt(KEY_TRY_COUNT + "_" + key, 0).apply();
+            mSharedPreferences.edit().putInt(buildKey(KEY_TRY_COUNT, key), 0).apply();
         }
         return limitTime;
     }
 
+    public void reset(String key) {
+        mSharedPreferences.edit().putInt(buildKey(KEY_TRY_COUNT, key), 0).apply();
+        mSharedPreferences.edit().putLong(buildKey(KEY_LOCK_TIMESTAMP, key), 0).apply();
+        mSharedPreferences.edit().putLong(buildKey(KEY_NEXT_TRY_TIMESTAMP, key), 0).apply();
+    }
+
     public long getLockTimestamp(String key) {
-        return mSharedPreferences.getLong(KEY_LOCK_TIMESTAMP + "_" + key, 0);
+        return mSharedPreferences.getLong(buildKey(KEY_LOCK_TIMESTAMP, key), 0);
     }
 
     public long getLimitDuration() {
