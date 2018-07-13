@@ -7,12 +7,20 @@
 
         <attr name="pgv_normal_oval_stroke_width" format="dimension" />
         <attr name="pgv_normal_oval_stroke_color" format="color|integer" />
+        <attr name="pgv_normal_oval_stroke_select_color" format="color|integer" />
+        <attr name="pgv_normal_oval_stroke_error_color" format="color|integer" />
         <attr name="pgv_normal_oval_solid_color" format="color|integer" />
+        <attr name="pgv_normal_oval_solid_select_color" format="color|integer" />
+        <attr name="pgv_normal_oval_solid_error_color" format="color|integer" />
         <attr name="pgv_normal_oval_radius" format="dimension" />
 
         <attr name="pgv_select_oval_stroke_width" format="dimension" />
         <attr name="pgv_select_oval_stroke_color" format="color|integer" />
+        <attr name="pgv_select_oval_stroke_select_color" format="color|integer" />
+        <attr name="pgv_select_oval_stroke_error_color" format="color|integer" />
         <attr name="pgv_select_oval_solid_color" format="color|integer" />
+        <attr name="pgv_select_oval_solid_select_color" format="color|integer" />
+        <attr name="pgv_select_oval_solid_error_color" format="color|integer" />
         <attr name="pgv_select_oval_radius" format="dimension" />
 
         <attr name="pgv_show_gesture_line" format="boolean" />

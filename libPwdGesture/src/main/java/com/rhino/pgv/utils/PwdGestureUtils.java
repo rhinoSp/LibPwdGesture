@@ -37,12 +37,20 @@ public class PwdGestureUtils {
 
         pwdGestureView.setNormalOvalStrokeWidth(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_WIDTH, 3));
         pwdGestureView.setNormalOvalStrokeColor(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_COLOR, 0xFFAAAAAA));
+        pwdGestureView.setNormalOvalStrokeSelectColor(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_SELECT_COLOR, 0xFF1BBC9B));
+        pwdGestureView.setNormalOvalSolidErrorColor(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_ERROR_COLOR, 0xFFFF0000));
         pwdGestureView.setNormalOvalSolidColor(extra.getInt(Build.KEY_NORMAL_OVAL_SOLID_COLOR, 0));
+        pwdGestureView.setNormalOvalSolidSelectColor(extra.getInt(Build.KEY_NORMAL_OVAL_SOLID_SELECT_COLOR, 0));
+        pwdGestureView.setNormalOvalSolidErrorColor(extra.getInt(Build.KEY_NORMAL_OVAL_SOLID_ERROR_COLOR, 0));
         pwdGestureView.setNormalOvalRadius(extra.getInt(Build.KEY_NORMAL_OVAL_RADIUS, 90));
 
         pwdGestureView.setSelectOvalStrokeWidth(extra.getInt(Build.KEY_SELECT_OVAL_STROKE_WIDTH, 0));
         pwdGestureView.setSelectOvalStrokeColor(extra.getInt(Build.KEY_SELECT_OVAL_STROKE_COLOR, 0));
-        pwdGestureView.setSelectOvalSolidColor(extra.getInt(Build.KEY_SELECT_OVAL_SOLID_COLOR, 0xFFAAAAAA));
+        pwdGestureView.setSelectOvalStrokeSelectColor(extra.getInt(Build.KEY_SELECT_OVAL_STROKE_SELECT_COLOR, 0));
+        pwdGestureView.setSelectOvalStrokeErrorColor(extra.getInt(Build.KEY_SELECT_OVAL_STROKE_ERROR_COLOR, 0));
+        pwdGestureView.setSelectOvalSolidColor(extra.getInt(Build.KEY_SELECT_OVAL_SOLID_COLOR, 0xFF1BBC9B));
+        pwdGestureView.setSelectOvalSolidSelectColor(extra.getInt(Build.KEY_SELECT_OVAL_SOLID_SELECT_COLOR, 0xFF1BBC9B));
+        pwdGestureView.setSelectOvalSolidErrorColor(extra.getInt(Build.KEY_SELECT_OVAL_SOLID_ERROR_COLOR, 0xFFFF0000));
         pwdGestureView.setSelectOvalRadius(extra.getInt(Build.KEY_SELECT_OVAL_RADIUS, 24));
 
         pwdGestureView.setShowGestureLine(extra.getBoolean(Build.KEY_SHOW_GESTURE_LINE, true));
@@ -68,12 +76,20 @@ public class PwdGestureUtils {
 
         public static final String KEY_NORMAL_OVAL_STROKE_WIDTH = "key_normal_oval_stroke_width";
         public static final String KEY_NORMAL_OVAL_STROKE_COLOR = "key_normal_oval_stroke_color";
+        public static final String KEY_NORMAL_OVAL_STROKE_SELECT_COLOR = "key_normal_oval_stroke_select_color";
+        public static final String KEY_NORMAL_OVAL_STROKE_ERROR_COLOR = "key_normal_oval_stroke_error_color";
         public static final String KEY_NORMAL_OVAL_SOLID_COLOR = "key_normal_oval_solid_color";
+        public static final String KEY_NORMAL_OVAL_SOLID_SELECT_COLOR = "key_normal_oval_solid_select_color";
+        public static final String KEY_NORMAL_OVAL_SOLID_ERROR_COLOR = "key_normal_oval_solid_error_color";
         public static final String KEY_NORMAL_OVAL_RADIUS = "key_normal_oval_radius";
 
         public static final String KEY_SELECT_OVAL_STROKE_WIDTH = "key_select_oval_stroke_width";
         public static final String KEY_SELECT_OVAL_STROKE_COLOR = "key_select_oval_stroke_color";
+        public static final String KEY_SELECT_OVAL_STROKE_SELECT_COLOR = "key_select_oval_stroke_select_color";
+        public static final String KEY_SELECT_OVAL_STROKE_ERROR_COLOR = "key_select_oval_stroke_error_color";
         public static final String KEY_SELECT_OVAL_SOLID_COLOR = "key_select_oval_solid_color";
+        public static final String KEY_SELECT_OVAL_SOLID_SELECT_COLOR = "key_select_oval_solid_select_color";
+        public static final String KEY_SELECT_OVAL_SOLID_ERROR_COLOR = "key_select_oval_solid_error_color";
         public static final String KEY_SELECT_OVAL_RADIUS = "key_select_oval_radius";
 
         public static final String KEY_SHOW_GESTURE_LINE = "key_show_gesture_line";
@@ -164,6 +180,28 @@ public class PwdGestureUtils {
         }
 
         /**
+         * Set the stroke color of normal oval when selected.
+         *
+         * @param color the stroke color of normal oval.
+         * @return Build
+         */
+        public Build setNormalOvalStrokeSelectColor(@ColorInt int color) {
+            intent.putExtra(KEY_NORMAL_OVAL_STROKE_SELECT_COLOR, color);
+            return this;
+        }
+
+        /**
+         * Set the stroke color of normal oval when match error.
+         *
+         * @param color the stroke color of normal oval.
+         * @return Build
+         */
+        public Build setNormalOvalStrokeErrorColor(@ColorInt int color) {
+            intent.putExtra(KEY_NORMAL_OVAL_STROKE_ERROR_COLOR, color);
+            return this;
+        }
+
+        /**
          * Set the solid color of normal oval.
          *
          * @param color the solid color of normal oval.
@@ -171,6 +209,28 @@ public class PwdGestureUtils {
          */
         public Build setNormalOvalSolidColor(@ColorInt int color) {
             intent.putExtra(KEY_NORMAL_OVAL_SOLID_COLOR, color);
+            return this;
+        }
+
+        /**
+         * Set the solid color of normal oval when selected.
+         *
+         * @param color the solid color of normal oval.
+         * @return Build
+         */
+        public Build setNormalOvalSolidSelectColor(@ColorInt int color) {
+            intent.putExtra(KEY_NORMAL_OVAL_SOLID_SELECT_COLOR, color);
+            return this;
+        }
+
+        /**
+         * Set the solid color of normal oval when match error.
+         *
+         * @param color the solid color of normal oval.
+         * @return Build
+         */
+        public Build setNormalOvalSolidErrorColor(@ColorInt int color) {
+            intent.putExtra(KEY_NORMAL_OVAL_SOLID_ERROR_COLOR, color);
             return this;
         }
 
@@ -208,6 +268,28 @@ public class PwdGestureUtils {
         }
 
         /**
+         * Set the stroke color of select oval when selected.
+         *
+         * @param color the stroke color of select oval.
+         * @return Build
+         */
+        public Build setSelectOvalStrokeSelectColor(@ColorInt int color) {
+            intent.putExtra(KEY_SELECT_OVAL_STROKE_SELECT_COLOR, color);
+            return this;
+        }
+
+        /**
+         * Set the stroke color of select oval when match error.
+         *
+         * @param color the stroke color of select oval.
+         * @return Build
+         */
+        public Build setSelectOvalStrokeErrorColor(@ColorInt int color) {
+            intent.putExtra(KEY_SELECT_OVAL_STROKE_ERROR_COLOR, color);
+            return this;
+        }
+
+        /**
          * Set the solid color of select oval.
          *
          * @param color the solid color of select oval.
@@ -215,6 +297,28 @@ public class PwdGestureUtils {
          */
         public Build setSelectOvalSolidColor(@ColorInt int color) {
             intent.putExtra(KEY_SELECT_OVAL_SOLID_COLOR, color);
+            return this;
+        }
+
+        /**
+         * Set the solid color of select oval when selected.
+         *
+         * @param color the solid color of select oval.
+         * @return Build
+         */
+        public Build setSelectOvalSolidSelectColor(@ColorInt int color) {
+            intent.putExtra(KEY_SELECT_OVAL_SOLID_SELECT_COLOR, color);
+            return this;
+        }
+
+        /**
+         * Set the solid color of select oval when match error.
+         *
+         * @param color the solid color of select oval.
+         * @return Build
+         */
+        public Build setSelectOvalSolidErrorColor(@ColorInt int color) {
+            intent.putExtra(KEY_SELECT_OVAL_SOLID_ERROR_COLOR, color);
             return this;
         }
 

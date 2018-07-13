@@ -88,6 +88,37 @@ public class MainActivity extends AppCompatActivity {
                         .show(MainActivity.this);
             }
         });
+        mBinding.btSetPassword4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PwdGestureUtils.createPwd()
+                        .setRowCount(3)
+                        .setColumnCount(3)
+                        .setNormalOvalStrokeWidth(2)
+                        .setNormalOvalStrokeColor(0xFFAAAAAA)
+                        .setNormalOvalStrokeSelectColor(0xFF1BBC9B)
+                        .setNormalOvalStrokeErrorColor(0xFFFF0000)
+                        .setNormalOvalSolidColor(0x22AAAAAA)
+                        .setNormalOvalSolidSelectColor(0x221BBC9B)
+                        .setNormalOvalSolidErrorColor(0x22FF0000)
+                        .setNormalOvalRadius(90)
+                        .setSelectOvalStrokeWidth(2)
+                        .setSelectOvalStrokeColor(0xFF1BBC9B)
+                        .setSelectOvalSolidColor(0xFF1BBC9B)
+                        .setSelectOvalRadius(30)
+                        .setShowGestureLine(true)
+                        .setGestureLineWidth(2)
+                        .setGestureLineColor(0xFF1BBC9B)
+                        .setAutoMatch(false)
+                        .setMinSelectCount(4)
+                        .setActionBarBackgroundColor(0xFFFF0000)
+                        .setStatusBarBackgroundColor(0x1A000000)
+                        .setTitleBackgroundColor(0xFFFF0000)
+                        .setTitle("创建手势密码3")
+                        .setTitleBackButtonVisible(true)
+                        .show(MainActivity.this);
+            }
+        });
         mBinding.btInputPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

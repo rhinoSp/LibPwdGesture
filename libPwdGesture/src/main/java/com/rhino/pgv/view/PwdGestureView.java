@@ -51,11 +51,19 @@ public class PwdGestureView extends View {
 
     private static final int DEFAULT_NORMAL_OVAL_STROKE_WIDTH = 3;
     private static final int DEFAULT_NORMAL_OVAL_STROKE_COLOR = 0xFFAAAAAA;
+    private static final int DEFAULT_NORMAL_OVAL_STROKE_SELECT_COLOR = 0xFF1BBC9B;
+    private static final int DEFAULT_NORMAL_OVAL_STROKE_ERROR_COLOR = 0xFFFF0000;
     private static final int DEFAULT_NORMAL_OVAL_SOLID_COLOR = 0x00000000;
+    private static final int DEFAULT_NORMAL_OVAL_SOLID_SELECT_COLOR = 0x00000000;
+    private static final int DEFAULT_NORMAL_OVAL_SOLID_ERROR_COLOR = 0x00000000;
     private static final int DEFAULT_NORMAL_OVAL_RADIUS = 90;
     private static final int DEFAULT_SELECT_OVAL_STROKE_WIDTH = 3;
     private static final int DEFAULT_SELECT_OVAL_STROKE_COLOR = 0xFF1BBC9B;
+    private static final int DEFAULT_SELECT_OVAL_STROKE_SELECT_COLOR = 0xFF1BBC9B;
+    private static final int DEFAULT_SELECT_OVAL_STROKE_ERROR_COLOR = 0xFFFF0000;
     private static final int DEFAULT_SELECT_OVAL_SOLID_COLOR = 0xFF1BBC9B;
+    private static final int DEFAULT_SELECT_OVAL_SOLID_SELECT_COLOR = 0xFF1BBC9B;
+    private static final int DEFAULT_SELECT_OVAL_SOLID_ERROR_COLOR = 0xFFFF0000;
     private static final int DEFAULT_SELECT_OVAL_RADIUS = 24;
     private static final boolean DEFAULT_SHOW_GESTURE_LINE = true;
     private static final int DEFAULT_GESTURE_LINE_WIDTH = 3;
@@ -68,11 +76,19 @@ public class PwdGestureView extends View {
     private int mRowCount;
     private int mNormalOvalStrokeWidth;
     private int mNormalOvalStrokeColor;
+    private int mNormalOvalStrokeSelectColor;
+    private int mNormalOvalStrokeErrorColor;
     private int mNormalOvalSolidColor;
+    private int mNormalOvalSolidSelectColor;
+    private int mNormalOvalSolidErrorColor;
     private float mNormalOvalRadius;
     private int mSelectOvalStrokeWidth;
     private int mSelectOvalStrokeColor;
+    private int mSelectOvalStrokeSelectColor;
+    private int mSelectOvalStrokeErrorColor;
     private int mSelectOvalSolidColor;
+    private int mSelectOvalSolidSelectColor;
+    private int mSelectOvalSolidErrorColor;
     private float mSelectOvalRadius;
     private boolean mShowGestureLine;
     private int mGestureLineWidth;
@@ -208,16 +224,32 @@ public class PwdGestureView extends View {
                     DEFAULT_NORMAL_OVAL_STROKE_WIDTH);
             mNormalOvalStrokeColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_normal_oval_stroke_color,
                     DEFAULT_NORMAL_OVAL_STROKE_COLOR);
+            mNormalOvalStrokeSelectColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_normal_oval_stroke_select_color,
+                    DEFAULT_NORMAL_OVAL_STROKE_SELECT_COLOR);
+            mNormalOvalStrokeErrorColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_normal_oval_stroke_error_color,
+                    DEFAULT_NORMAL_OVAL_STROKE_ERROR_COLOR);
             mNormalOvalSolidColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_normal_oval_solid_color,
                     DEFAULT_NORMAL_OVAL_SOLID_COLOR);
+            mNormalOvalSolidSelectColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_normal_oval_solid_select_color,
+                    DEFAULT_NORMAL_OVAL_SOLID_SELECT_COLOR);
+            mNormalOvalSolidErrorColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_normal_oval_solid_error_color,
+                    DEFAULT_NORMAL_OVAL_SOLID_ERROR_COLOR);
             mNormalOvalRadius = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_normal_oval_radius,
                     DEFAULT_NORMAL_OVAL_RADIUS);
             mSelectOvalStrokeWidth = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_select_oval_stroke_width,
                     DEFAULT_SELECT_OVAL_STROKE_WIDTH);
             mSelectOvalStrokeColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_select_oval_stroke_color,
                     DEFAULT_SELECT_OVAL_STROKE_COLOR);
+            mSelectOvalStrokeSelectColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_select_oval_stroke_select_color,
+                    DEFAULT_SELECT_OVAL_STROKE_SELECT_COLOR);
+            mSelectOvalStrokeErrorColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_select_oval_stroke_error_color,
+                    DEFAULT_SELECT_OVAL_STROKE_ERROR_COLOR);
             mSelectOvalSolidColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_select_oval_solid_color,
                     DEFAULT_SELECT_OVAL_SOLID_COLOR);
+            mSelectOvalSolidSelectColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_select_oval_solid_select_color,
+                    DEFAULT_SELECT_OVAL_SOLID_SELECT_COLOR);
+            mSelectOvalSolidErrorColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_select_oval_solid_error_color,
+                    DEFAULT_SELECT_OVAL_SOLID_ERROR_COLOR);
             mSelectOvalRadius = typedArray.getDimensionPixelOffset(R.styleable.PwdGestureView_pgv_select_oval_radius,
                     DEFAULT_SELECT_OVAL_RADIUS);
             mMatchFailedColor = typedArray.getColor(R.styleable.PwdGestureView_pgv_match_failed_color,
@@ -294,9 +326,11 @@ public class PwdGestureView extends View {
                 mNormalOvalPaint.setStyle(Paint.Style.STROKE);
                 mNormalOvalPaint.setStrokeWidth(mNormalOvalStrokeWidth);
                 if (MATCH_STATUS_MATCH_FAILED == mMatchStatus) {
-                    mNormalOvalPaint.setColor(mMatchFailedColor);
+                    mNormalOvalPaint.setColor(mNormalOvalStrokeErrorColor);
+                } else if (isSelected(mRectFPointList.get(i))) {
+                    mNormalOvalPaint.setColor(mNormalOvalStrokeSelectColor);
                 } else {
-                    mNormalOvalPaint.setColor(isSelected(mRectFPointList.get(i)) ? mGestureLineColor : mNormalOvalStrokeColor);
+                    mNormalOvalPaint.setColor(mNormalOvalStrokeColor);
                 }
                 canvas.drawCircle(mRectFPointList.get(i).centerX(), mRectFPointList.get(i).centerY(), mNormalOvalRadius, mNormalOvalPaint);
             }
@@ -304,9 +338,11 @@ public class PwdGestureView extends View {
             if (mNormalOvalSolidColor != 0) {
                 mNormalOvalPaint.setStyle(Paint.Style.FILL);
                 if (MATCH_STATUS_MATCH_FAILED == mMatchStatus) {
-                    mNormalOvalPaint.setColor(mMatchFailedColor);
+                    mNormalOvalPaint.setColor(mNormalOvalSolidErrorColor);
+                } else if (isSelected(mRectFPointList.get(i))) {
+                    mNormalOvalPaint.setColor(mNormalOvalSolidSelectColor);
                 } else {
-                    mNormalOvalPaint.setColor(isSelected(mRectFPointList.get(i)) ? mGestureLineColor : mNormalOvalSolidColor);
+                    mNormalOvalPaint.setColor(mNormalOvalSolidColor);
                 }
                 canvas.drawCircle(mRectFPointList.get(i).centerX(), mRectFPointList.get(i).centerY(),
                         mNormalOvalRadius - mNormalOvalStrokeWidth / 2, mNormalOvalPaint);
@@ -328,7 +364,7 @@ public class PwdGestureView extends View {
                 mSelectOvalPaint.setStyle(Paint.Style.STROKE);
                 mSelectOvalPaint.setStrokeWidth(mSelectOvalStrokeWidth);
                 if (MATCH_STATUS_MATCH_FAILED == mMatchStatus) {
-                    mSelectOvalPaint.setColor(mMatchFailedColor);
+                    mSelectOvalPaint.setColor(mSelectOvalStrokeErrorColor);
                 } else {
                     mSelectOvalPaint.setColor(mSelectOvalStrokeColor);
                 }
@@ -338,7 +374,7 @@ public class PwdGestureView extends View {
             if (mSelectOvalSolidColor != 0) {
                 mSelectOvalPaint.setStyle(Paint.Style.FILL);
                 if (MATCH_STATUS_MATCH_FAILED == mMatchStatus) {
-                    mSelectOvalPaint.setColor(mMatchFailedColor);
+                    mSelectOvalPaint.setColor(mSelectOvalSolidErrorColor);
                 } else {
                     mSelectOvalPaint.setColor(mSelectOvalSolidColor);
                 }
@@ -516,12 +552,48 @@ public class PwdGestureView extends View {
     }
 
     /**
+     * Set the stroke color of normal oval when selected.
+     *
+     * @param color the stroke color of normal oval.
+     */
+    public void setNormalOvalStrokeSelectColor(@ColorInt int color) {
+        this.mNormalOvalStrokeSelectColor = color;
+    }
+
+    /**
+     * Set the stroke color of normal oval when match error.
+     *
+     * @param color the stroke color of normal oval.
+     */
+    public void setNormalOvalStrokeErrorColor(@ColorInt int color) {
+        this.mNormalOvalStrokeErrorColor = color;
+    }
+
+    /**
      * Set the solid color of normal oval.
      *
      * @param color the solid color of normal oval.
      */
     public void setNormalOvalSolidColor(@ColorInt int color) {
         this.mNormalOvalSolidColor = color;
+    }
+
+    /**
+     * Set the solid color of normal oval when selected.
+     *
+     * @param color the solid color of normal oval.
+     */
+    public void setNormalOvalSolidSelectColor(@ColorInt int color) {
+        this.mNormalOvalSolidSelectColor = color;
+    }
+
+    /**
+     * Set the solid color of normal oval when match error.
+     *
+     * @param color the solid color of normal oval.
+     */
+    public void setNormalOvalSolidErrorColor(@ColorInt int color) {
+        this.mNormalOvalSolidErrorColor = color;
     }
 
     /**
@@ -552,12 +624,48 @@ public class PwdGestureView extends View {
     }
 
     /**
+     * Set the stroke color of select oval when selected.
+     *
+     * @param color the stroke color of select oval.
+     */
+    public void setSelectOvalStrokeSelectColor(@ColorInt int color) {
+        this.mSelectOvalStrokeSelectColor = color;
+    }
+
+    /**
+     * Set the stroke color of select oval when match error.
+     *
+     * @param color the stroke color of select oval.
+     */
+    public void setSelectOvalStrokeErrorColor(@ColorInt int color) {
+        this.mSelectOvalStrokeErrorColor = color;
+    }
+
+    /**
      * Set the solid color of select oval.
      *
      * @param color the solid color of select oval.
      */
     public void setSelectOvalSolidColor(@ColorInt int color) {
         this.mSelectOvalSolidColor = color;
+    }
+
+    /**
+     * Set the solid color of select oval when selected.
+     *
+     * @param color the solid color of select oval.
+     */
+    public void setSelectOvalSolidSelectColor(@ColorInt int color) {
+        this.mSelectOvalSolidSelectColor = color;
+    }
+
+    /**
+     * Set the solid color of select oval when match error.
+     *
+     * @param color the solid color of select oval.
+     */
+    public void setSelectOvalSolidErrorColor(@ColorInt int color) {
+        this.mSelectOvalSolidErrorColor = color;
     }
 
     /**
