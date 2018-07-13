@@ -21,138 +21,12 @@ import com.rhino.pgv.utils.PwdGestureUtils;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding mBinding;
     private int[] mPwdGestureArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        mBinding.btSetPassword1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PwdGestureUtils.createPwd().show(MainActivity.this);
-            }
-        });
-        mBinding.btSetPassword2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PwdGestureUtils.createPwd()
-                        .setRowCount(3)
-                        .setColumnCount(3)
-                        .setNormalOvalStrokeWidth(2)
-                        .setNormalOvalStrokeColor(0xFFAAAAAA)
-                        .setNormalOvalSolidColor(0xFFAAAAAA)
-                        .setNormalOvalRadius(10)
-                        .setSelectOvalStrokeWidth(2)
-                        .setSelectOvalStrokeColor(0xFF1BBC9B)
-                        .setSelectOvalSolidColor(0xFF1BBC9B)
-                        .setSelectOvalRadius(10)
-                        .setShowGestureLine(true)
-                        .setGestureLineWidth(2)
-                        .setGestureLineColor(0xFF1BBC9B)
-                        .setAutoMatch(false)
-                        .setMinSelectCount(4)
-                        .setActionBarBackgroundColor(0xFF1BBC9B)
-                        .setStatusBarBackgroundColor(0x1A000000)
-                        .setTitleBackgroundColor(0xFF1BBC9B)
-                        .setTitle("创建手势密码2")
-                        .setTitleBackButtonVisible(true)
-                        .show(MainActivity.this);
-            }
-        });
-        mBinding.btSetPassword3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PwdGestureUtils.createPwd()
-                        .setRowCount(3)
-                        .setColumnCount(3)
-                        .setNormalOvalStrokeWidth(2)
-                        .setNormalOvalStrokeColor(0xFFAAAAAA)
-                        .setNormalOvalSolidColor(0)
-                        .setNormalOvalRadius(90)
-                        .setSelectOvalStrokeWidth(2)
-                        .setSelectOvalStrokeColor(0xFF1BBC9B)
-                        .setSelectOvalSolidColor(0)
-                        .setSelectOvalRadius(30)
-                        .setShowGestureLine(true)
-                        .setGestureLineWidth(2)
-                        .setGestureLineColor(0xFF1BBC9B)
-                        .setAutoMatch(false)
-                        .setMinSelectCount(4)
-                        .setActionBarBackgroundColor(0xFFFF0000)
-                        .setStatusBarBackgroundColor(0x1A000000)
-                        .setTitleBackgroundColor(0xFFFF0000)
-                        .setTitle("创建手势密码3")
-                        .setTitleBackButtonVisible(true)
-                        .show(MainActivity.this);
-            }
-        });
-        mBinding.btSetPassword4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PwdGestureUtils.createPwd()
-                        .setRowCount(3)
-                        .setColumnCount(3)
-                        .setNormalOvalStrokeWidth(2)
-                        .setNormalOvalStrokeColor(0xFFAAAAAA)
-                        .setNormalOvalStrokeSelectColor(0xFF1BBC9B)
-                        .setNormalOvalStrokeErrorColor(0xFFFF0000)
-                        .setNormalOvalSolidColor(0x22AAAAAA)
-                        .setNormalOvalSolidSelectColor(0x221BBC9B)
-                        .setNormalOvalSolidErrorColor(0x22FF0000)
-                        .setNormalOvalRadius(90)
-                        .setSelectOvalStrokeWidth(2)
-                        .setSelectOvalStrokeColor(0xFF1BBC9B)
-                        .setSelectOvalSolidColor(0xFF1BBC9B)
-                        .setSelectOvalRadius(30)
-                        .setShowGestureLine(true)
-                        .setGestureLineWidth(2)
-                        .setGestureLineColor(0xFF1BBC9B)
-                        .setAutoMatch(false)
-                        .setMinSelectCount(4)
-                        .setActionBarBackgroundColor(0xFFFF0000)
-                        .setStatusBarBackgroundColor(0x1A000000)
-                        .setTitleBackgroundColor(0xFFFF0000)
-                        .setTitle("创建手势密码3")
-                        .setTitleBackButtonVisible(true)
-                        .show(MainActivity.this);
-            }
-        });
-        mBinding.btInputPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPwdGestureArray == null || mPwdGestureArray.length == 0) {
-                    showToast("请先设置手势密码");
-                    return;
-                }
-                PwdGestureUtils.inputPwd()
-                        .setRowCount(3)
-                        .setColumnCount(3)
-                        .setNormalOvalStrokeWidth(2)
-                        .setNormalOvalStrokeColor(0xFFAAAAAA)
-                        .setNormalOvalSolidColor(0xFFAAAAAA)
-                        .setNormalOvalRadius(10)
-                        .setSelectOvalStrokeWidth(2)
-                        .setSelectOvalStrokeColor(0xFF1BBC9B)
-                        .setSelectOvalSolidColor(0xFF1BBC9B)
-                        .setSelectOvalRadius(10)
-                        .setShowGestureLine(true)
-                        .setGestureLineWidth(2)
-                        .setGestureLineColor(0xFF1BBC9B)
-                        .setAutoMatch(true)
-                        .setAutoResetDelay(1000)
-                        .setMatchFailedColor(0xFFFF0000)
-                        .setMinSelectCount(4)
-                        .setRightPassword(mPwdGestureArray)
-                        .setActionBarBackgroundColor(0xFF1BBC9B)
-//                        .setStatusBarBackgroundColor(0x1A000000)
-//                        .setTitleBackgroundColor(0xFF1BBC9B)
-                        .setTitle("验证手势密码")
-                        .setTitleBackButtonVisible(false)
-                        .show(MainActivity.this);
-            }
-        });
+        setContentView(R.layout.activity_main);
     }
 
     @Override
@@ -161,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case PwdGestureUtils.Build.REQUEST_CODE_CREATE_PWD:
                 if (resultCode == Activity.RESULT_OK) {
-                    showToast("手势密码设置成功");
+                    showToast("手势密码创建成功");
                     mPwdGestureArray = data.getIntArrayExtra(PwdGestureUtils.Build.KEY_RIGHT_PASSWORD);
                 } else {
-                    showToast("取消设置");
+                    showToast("取消创建");
                 }
                 break;
             case PwdGestureUtils.Build.REQUEST_CODE_INPUT_PWD:
@@ -172,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                     // 手势密码验证通过，进入首页
                     showToast("手势密码验证通过");
                     startActivity(new Intent(getApplicationContext(), SecondActivity.class));
-                    finish();
+                    //finish();
                 } else {
                     showToast("放弃验证");
                 }
@@ -186,5 +60,177 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
+    public void showCreatePwdStyle1(View v) {
+        PwdGestureUtils.createPwd()
+                .setTitle("创建手势密码1")
+                .show(MainActivity.this);
+    }
+
+    public void showCreatePwdStyle2(View v) {
+        PwdGestureUtils.createPwd()
+                .setNormalOvalStrokeWidth(0)
+                .setNormalOvalSolidColor(0x1A000000)
+                .setNormalOvalSolidSelectColor(0xFFD9534F)
+                .setNormalOvalSolidErrorColor(0xFFFF0000)
+                .setNormalOvalRadius(10)
+                .setSelectOvalSolidColor(0xFFD9534F)
+                .setSelectOvalSolidErrorColor(0xFFFF0000)
+                .setSelectOvalRadius(10)
+                .setGestureLineColor(0xFFD9534F)
+                .setGestureLineErrorColor(0xFFFF0000)
+                .setActionBarBackgroundColor(0xFFD9534F)
+                .setStatusBarBackgroundColor(0x1A000000)
+                .setTitleBackgroundColor(0xFFD9534F)
+                .setTitle("创建手势密码2")
+                .setTitleBackButtonVisible(true)
+                .show(MainActivity.this);
+    }
+
+    public void showCreatePwdStyle3(View v) {
+        PwdGestureUtils.createPwd()
+                .setNormalOvalStrokeColor(0x1A000000)
+                .setNormalOvalStrokeSelectColor(0xFF6AB74B)
+                .setNormalOvalStrokeErrorColor(0xFFFF0000)
+                .setNormalOvalSolidColor(0)
+                .setSelectOvalStrokeWidth(3)
+                .setSelectOvalStrokeColor(0xFF6AB74B)
+                .setSelectOvalStrokeErrorColor(0xFFFF0000)
+                .setSelectOvalSolidColor(0)
+                .setGestureLineColor(0xFF6AB74B)
+                .setGestureLineErrorColor(0xFFFF0000)
+                .setActionBarBackgroundColor(0xFF6AB74B)
+                .setStatusBarBackgroundColor(0x00000000)
+                .setTitleBackgroundColor(0xFF6AB74B)
+                .setTitle("创建手势密码3")
+                .setTitleBackButtonVisible(true)
+                .show(MainActivity.this);
+    }
+
+    public void showCreatePwdStyle4(View v) {
+        PwdGestureUtils.createPwd()
+                .setRowCount(3)
+                .setColumnCount(3)
+                .setNormalOvalStrokeWidth(3)
+                .setNormalOvalStrokeColor(0x1A000000)
+                .setNormalOvalStrokeSelectColor(0x22038977)
+                .setNormalOvalStrokeErrorColor(0x22FF0000)
+                .setNormalOvalSolidColor(0)
+                .setNormalOvalSolidSelectColor(0x22038977)
+                .setNormalOvalSolidErrorColor(0x22FF0000)
+                .setNormalOvalRadius(90)
+                .setSelectOvalStrokeWidth(0)
+                .setSelectOvalSolidColor(0xFF038977)
+                .setSelectOvalSolidErrorColor(0xFFFF0000)
+                .setSelectOvalRadius(50)
+                .setShowGestureLine(true)
+                .setGestureLineWidth(3)
+                .setGestureLineColor(0xFF038977)
+                .setGestureLineErrorColor(0xFFFF0000)
+                .setMinSelectCount(4)
+                .setActionBarBackgroundColor(0xFF038977)
+                .setStatusBarBackgroundColor(0x1A000000)
+                .setTitleBackgroundColor(0xFF038977)
+                .setTitle("创建手势密码4")
+                .setTitleBackButtonVisible(true)
+                .show(MainActivity.this);
+    }
+
+    public void showInputPwd1(View v) {
+        if (mPwdGestureArray == null || mPwdGestureArray.length == 0) {
+            showToast("请先创建手势密码");
+            return;
+        }
+        PwdGestureUtils.inputPwd()
+                .setRightPassword(mPwdGestureArray)
+                .setTitle("验证手势密码1")
+                .setTitleBackButtonVisible(false)
+                .show(MainActivity.this);
+    }
+
+    public void showInputPwd2(View v) {
+        if (mPwdGestureArray == null || mPwdGestureArray.length == 0) {
+            showToast("请先创建手势密码");
+            return;
+        }
+        PwdGestureUtils.inputPwd()
+                .setNormalOvalStrokeWidth(0)
+                .setNormalOvalSolidColor(0x1A000000)
+                .setNormalOvalSolidSelectColor(0xFFD9534F)
+                .setNormalOvalSolidErrorColor(0xFFFF0000)
+                .setNormalOvalRadius(10)
+                .setSelectOvalSolidColor(0xFFD9534F)
+                .setSelectOvalSolidErrorColor(0xFFFF0000)
+                .setSelectOvalRadius(10)
+                .setGestureLineColor(0xFFD9534F)
+                .setGestureLineErrorColor(0xFFFF0000)
+                .setRightPassword(mPwdGestureArray)
+                .setActionBarBackgroundColor(0xFFD9534F)
+                .setStatusBarBackgroundColor(0x1A000000)
+                .setTitleBackgroundColor(0xFFD9534F)
+                .setTitle("验证手势密码2")
+                .setTitleBackButtonVisible(false)
+                .show(MainActivity.this);
+    }
+
+    public void showInputPwd3(View v) {
+        if (mPwdGestureArray == null || mPwdGestureArray.length == 0) {
+            showToast("请先创建手势密码");
+            return;
+        }
+        PwdGestureUtils.inputPwd()
+                .setNormalOvalStrokeColor(0x1A000000)
+                .setNormalOvalStrokeSelectColor(0xFF6AB74B)
+                .setNormalOvalStrokeErrorColor(0xFFFF0000)
+                .setNormalOvalSolidColor(0)
+                .setSelectOvalStrokeWidth(3)
+                .setSelectOvalStrokeColor(0xFF6AB74B)
+                .setSelectOvalStrokeErrorColor(0xFFFF0000)
+                .setSelectOvalSolidColor(0)
+                .setGestureLineColor(0xFF6AB74B)
+                .setGestureLineErrorColor(0xFFFF0000)
+                .setRightPassword(mPwdGestureArray)
+                .setActionBarBackgroundColor(0xFF6AB74B)
+                .setStatusBarBackgroundColor(0x00000000)
+                .setTitleBackgroundColor(0xFF6AB74B)
+                .setTitle("验证手势密码3")
+                .setTitleBackButtonVisible(false)
+                .show(MainActivity.this);
+    }
+
+    public void showInputPwd4(View v) {
+        if (mPwdGestureArray == null || mPwdGestureArray.length == 0) {
+            showToast("请先创建手势密码");
+            return;
+        }
+        PwdGestureUtils.inputPwd()
+                .setRowCount(3)
+                .setColumnCount(3)
+                .setNormalOvalStrokeWidth(3)
+                .setNormalOvalStrokeColor(0x1A000000)
+                .setNormalOvalStrokeSelectColor(0x22038977)
+                .setNormalOvalStrokeErrorColor(0x22FF0000)
+                .setNormalOvalSolidColor(0)
+                .setNormalOvalSolidSelectColor(0x22038977)
+                .setNormalOvalSolidErrorColor(0x22FF0000)
+                .setNormalOvalRadius(90)
+                .setSelectOvalStrokeWidth(0)
+                .setSelectOvalSolidColor(0xFF038977)
+                .setSelectOvalSolidErrorColor(0xFFFF0000)
+                .setSelectOvalRadius(50)
+                .setShowGestureLine(true)
+                .setGestureLineWidth(3)
+                .setGestureLineColor(0xFF038977)
+                .setGestureLineErrorColor(0xFFFF0000)
+                .setAutoMatch(true)
+                .setAutoResetDelay(1000)
+                .setMinSelectCount(4)
+                .setRightPassword(mPwdGestureArray)
+                .setActionBarBackgroundColor(0xFF038977)
+                .setStatusBarBackgroundColor(0x1A000000)
+                .setTitleBackgroundColor(0xFF038977)
+                .setTitle("验证手势密码4")
+                .setTitleBackButtonVisible(false)
+                .show(MainActivity.this);
+    }
 
 }

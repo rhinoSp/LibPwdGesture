@@ -6,40 +6,107 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/bt_set_password1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="设置手势密码1" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/bt_set_password2"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="设置手势密码2" />
+            <Button
+                android:id="@+id/bt_create_password1"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="showCreatePwdStyle1"
+                android:text="创建手势密码1" />
 
-        <Button
-            android:id="@+id/bt_set_password3"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="设置手势密码3" />
+            <Button
+                android:id="@+id/bt_input_password1"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="showInputPwd1"
+                android:text="验证手势密码1" />
 
-        <Button
-            android:id="@+id/bt_set_password4"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="设置手势密码4" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/bt_input_password"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="验证手势密码" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/bt_create_password2"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="showCreatePwdStyle2"
+                android:text="创建手势密码2" />
+
+            <Button
+                android:id="@+id/bt_input_password2"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="showInputPwd2"
+                android:text="验证手势密码2" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_create_password3"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="showCreatePwdStyle3"
+                android:text="创建手势密码3" />
+
+            <Button
+                android:id="@+id/bt_input_password3"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="showInputPwd3"
+                android:text="验证手势密码3" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_create_password4"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="showCreatePwdStyle4"
+                android:text="创建手势密码4" />
+
+            <Button
+                android:id="@+id/bt_input_password4"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="showInputPwd4"
+                android:text="验证手势密码4" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -101,14 +101,17 @@ public class PwdGestureCreateActivity extends FragmentActivity implements View.O
             if (right) {
                 mTvTips1.setText("您的新密码");
                 mBtSure.setEnabled(true);
+                mPwdGestureView.setEnabled(false);
             } else {
                 mTvTips1.setText("两次图案不一致");
+                mPwdGestureView.showMatchFailedView();
             }
         }
     }
 
     public void onCLickReset() {
         mPwdGestureView.reset();
+        mPwdGestureView.setEnabled(true);
         mPwdGestureView.setRightPassword(new int[]{});
         mBtRedraw.setVisibility(View.INVISIBLE);
         mBtSure.setVisibility(View.INVISIBLE);

@@ -24,13 +24,13 @@
         <attr name="pgv_select_oval_radius" format="dimension" />
 
         <attr name="pgv_show_gesture_line" format="boolean" />
-        <attr name="pgv_line_color" format="color|integer" />
         <attr name="pgv_line_width" format="dimension" />
+        <attr name="pgv_line_color" format="color|integer" />
+        <attr name="pgv_line_error_color" format="color|integer" />
 
         <attr name="pgv_auto_match" format="boolean" />
         <attr name="pgv_auto_reset_delay" format="integer" />
 
-        <attr name="pgv_match_failed_color" format="color|integer" />
         <attr name="pgv_min_select_count" format="integer" />
     </declare-styleable>
 

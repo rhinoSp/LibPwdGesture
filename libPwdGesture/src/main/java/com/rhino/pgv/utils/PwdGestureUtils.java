@@ -36,9 +36,9 @@ public class PwdGestureUtils {
         pwdGestureView.setColumnCount(extra.getInt(Build.KEY_COLUMN_COUNT));
 
         pwdGestureView.setNormalOvalStrokeWidth(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_WIDTH, 3));
-        pwdGestureView.setNormalOvalStrokeColor(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_COLOR, 0xFFAAAAAA));
+        pwdGestureView.setNormalOvalStrokeColor(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_COLOR, 0x1A000000));
         pwdGestureView.setNormalOvalStrokeSelectColor(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_SELECT_COLOR, 0xFF1BBC9B));
-        pwdGestureView.setNormalOvalSolidErrorColor(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_ERROR_COLOR, 0xFFFF0000));
+        pwdGestureView.setNormalOvalStrokeErrorColor(extra.getInt(Build.KEY_NORMAL_OVAL_STROKE_ERROR_COLOR, 0xFFFF0000));
         pwdGestureView.setNormalOvalSolidColor(extra.getInt(Build.KEY_NORMAL_OVAL_SOLID_COLOR, 0));
         pwdGestureView.setNormalOvalSolidSelectColor(extra.getInt(Build.KEY_NORMAL_OVAL_SOLID_SELECT_COLOR, 0));
         pwdGestureView.setNormalOvalSolidErrorColor(extra.getInt(Build.KEY_NORMAL_OVAL_SOLID_ERROR_COLOR, 0));
@@ -46,20 +46,18 @@ public class PwdGestureUtils {
 
         pwdGestureView.setSelectOvalStrokeWidth(extra.getInt(Build.KEY_SELECT_OVAL_STROKE_WIDTH, 0));
         pwdGestureView.setSelectOvalStrokeColor(extra.getInt(Build.KEY_SELECT_OVAL_STROKE_COLOR, 0));
-        pwdGestureView.setSelectOvalStrokeSelectColor(extra.getInt(Build.KEY_SELECT_OVAL_STROKE_SELECT_COLOR, 0));
         pwdGestureView.setSelectOvalStrokeErrorColor(extra.getInt(Build.KEY_SELECT_OVAL_STROKE_ERROR_COLOR, 0));
         pwdGestureView.setSelectOvalSolidColor(extra.getInt(Build.KEY_SELECT_OVAL_SOLID_COLOR, 0xFF1BBC9B));
-        pwdGestureView.setSelectOvalSolidSelectColor(extra.getInt(Build.KEY_SELECT_OVAL_SOLID_SELECT_COLOR, 0xFF1BBC9B));
         pwdGestureView.setSelectOvalSolidErrorColor(extra.getInt(Build.KEY_SELECT_OVAL_SOLID_ERROR_COLOR, 0xFFFF0000));
         pwdGestureView.setSelectOvalRadius(extra.getInt(Build.KEY_SELECT_OVAL_RADIUS, 24));
 
         pwdGestureView.setShowGestureLine(extra.getBoolean(Build.KEY_SHOW_GESTURE_LINE, true));
         pwdGestureView.setGestureLineColor(extra.getInt(Build.KEY_GESTURE_LINE_COLOR, 0xFF1BBC9B));
+        pwdGestureView.setGestureLineErrorColor(extra.getInt(Build.KEY_GESTURE_LINE_ERROR_COLOR, 0xFFFF0000));
         pwdGestureView.setGestureLineWidth(extra.getInt(Build.KEY_GESTURE_LINE_WIDTH, 3));
 
         pwdGestureView.setAutoMatch(extra.getBoolean(Build.KEY_AUTO_MATCH, false));
         pwdGestureView.setAutoResetDelay(extra.getInt(Build.KEY_AUTO_RESET_DELAY, 1000));
-        pwdGestureView.setMatchFailedColor(extra.getInt(Build.KEY_MATCH_FAILED_COLOR, 0xFFFF0000));
 
         pwdGestureView.setMinSelectCount(extra.getInt(Build.KEY_MIN_SELECT_COUNT, 4));
 
@@ -85,20 +83,18 @@ public class PwdGestureUtils {
 
         public static final String KEY_SELECT_OVAL_STROKE_WIDTH = "key_select_oval_stroke_width";
         public static final String KEY_SELECT_OVAL_STROKE_COLOR = "key_select_oval_stroke_color";
-        public static final String KEY_SELECT_OVAL_STROKE_SELECT_COLOR = "key_select_oval_stroke_select_color";
         public static final String KEY_SELECT_OVAL_STROKE_ERROR_COLOR = "key_select_oval_stroke_error_color";
         public static final String KEY_SELECT_OVAL_SOLID_COLOR = "key_select_oval_solid_color";
-        public static final String KEY_SELECT_OVAL_SOLID_SELECT_COLOR = "key_select_oval_solid_select_color";
         public static final String KEY_SELECT_OVAL_SOLID_ERROR_COLOR = "key_select_oval_solid_error_color";
         public static final String KEY_SELECT_OVAL_RADIUS = "key_select_oval_radius";
 
         public static final String KEY_SHOW_GESTURE_LINE = "key_show_gesture_line";
         public static final String KEY_GESTURE_LINE_COLOR = "key_gesture_line_color";
+        public static final String KEY_GESTURE_LINE_ERROR_COLOR = "key_gesture_line_error_color";
         public static final String KEY_GESTURE_LINE_WIDTH = "key_gesture_line_width";
 
         public static final String KEY_AUTO_MATCH = "key_auto_match";
         public static final String KEY_AUTO_RESET_DELAY = "key_auto_reset_delay";
-        public static final String KEY_MATCH_FAILED_COLOR = "key_match_failed_color";
 
         public static final String KEY_MIN_SELECT_COUNT = "key_min_select_count";
         public static final String KEY_RIGHT_PASSWORD = "key_right_password";
@@ -268,17 +264,6 @@ public class PwdGestureUtils {
         }
 
         /**
-         * Set the stroke color of select oval when selected.
-         *
-         * @param color the stroke color of select oval.
-         * @return Build
-         */
-        public Build setSelectOvalStrokeSelectColor(@ColorInt int color) {
-            intent.putExtra(KEY_SELECT_OVAL_STROKE_SELECT_COLOR, color);
-            return this;
-        }
-
-        /**
          * Set the stroke color of select oval when match error.
          *
          * @param color the stroke color of select oval.
@@ -297,17 +282,6 @@ public class PwdGestureUtils {
          */
         public Build setSelectOvalSolidColor(@ColorInt int color) {
             intent.putExtra(KEY_SELECT_OVAL_SOLID_COLOR, color);
-            return this;
-        }
-
-        /**
-         * Set the solid color of select oval when selected.
-         *
-         * @param color the solid color of select oval.
-         * @return Build
-         */
-        public Build setSelectOvalSolidSelectColor(@ColorInt int color) {
-            intent.putExtra(KEY_SELECT_OVAL_SOLID_SELECT_COLOR, color);
             return this;
         }
 
@@ -367,6 +341,17 @@ public class PwdGestureUtils {
         }
 
         /**
+         * Set the color of gesture line when match error.
+         *
+         * @param color the color of gesture line.
+         * @return Build
+         */
+        public Build setGestureLineErrorColor(@ColorInt int color) {
+            intent.putExtra(KEY_GESTURE_LINE_ERROR_COLOR, color);
+            return this;
+        }
+
+        /**
          * Set whether auto match.
          *
          * @param autoMatch True show.
@@ -385,17 +370,6 @@ public class PwdGestureUtils {
          */
         public Build setAutoResetDelay(int delay) {
             intent.putExtra(KEY_AUTO_RESET_DELAY, delay);
-            return this;
-        }
-
-        /**
-         * Set the color when match failed.
-         *
-         * @param color the color when match failed.
-         * @return Build
-         */
-        public Build setMatchFailedColor(@ColorInt int color) {
-            intent.putExtra(KEY_MATCH_FAILED_COLOR, color);
             return this;
         }
 
