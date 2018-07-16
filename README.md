@@ -85,31 +85,31 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 * setNormalOvalStrokeColor(@ColorInt int color) 设置未选中圆环颜色
 * setNormalOvalStrokeSelectColor(@ColorInt int color) 设置未选中圆环选中时颜色
 * setNormalOvalStrokeErrorColor(@ColorInt int color) 设置未选中圆环匹配失败时颜色
-* setNormalOvalSolidColor(@ColorInt int color) 设置未选中时圆环填充颜色
+* setNormalOvalSolidColor(@ColorInt int color) 设置未选中圆环填充颜色
 * setNormalOvalSolidSelectColor(@ColorInt int color) 设置未选中圆环填充选中时颜色
 * setNormalOvalSolidErrorColor(@ColorInt int color) 设置未选中圆环填充匹配失败时颜色
 * setNormalOvalRadius(int radius) 设置未选中圆环半径
-* setSelectOvalStrokeWidth(int width) 
-* setSelectOvalStrokeColor(@ColorInt int color) 
-* setSelectOvalStrokeErrorColor(@ColorInt int color) 
-* setSelectOvalSolidColor(@ColorInt int color) 
-* setSelectOvalSolidErrorColor(@ColorInt int color)
-* setSelectOvalRadius(int radius)
-* setShowGestureLine(boolean show) 
-* setGestureLineWidth(int width) 
-* setGestureLineColor(@ColorInt int color)
-* setGestureLineErrorColor(@ColorInt int color)
-* setAutoMatch(boolean autoMatch)
-* setAutoResetDelay(int delay)
-* setMinSelectCount(int count)
-* setRightPassword(int[] rightPwd)
-* setActionBarBackgroundColor(@ColorInt int color)
-* setStatusBarBackgroundColor(@ColorInt int color)
-* setTitleBackgroundColor(@ColorInt int color)
-* setTitle(String title)
-* setTitleBackButtonVisible(boolean visible)
-* show(@NonNull Activity activity)
-* show(@NonNull Activity activity, @NonNull Class<?> cls)
+* setSelectOvalStrokeWidth(int width) 设置选中圆环宽度
+* setSelectOvalStrokeColor(@ColorInt int color) 设置选中圆环颜色
+* setSelectOvalStrokeErrorColor(@ColorInt int color) 设置选中圆环匹配失败时颜色
+* setSelectOvalSolidColor(@ColorInt int color) 设置选中圆环填充颜色
+* setSelectOvalSolidErrorColor(@ColorInt int color) 设置选中圆环填充匹配失败时颜色
+* setSelectOvalRadius(int radius) 设置选中圆环半径
+* setShowGestureLine(boolean show) 设置是否显示手势线条
+* setGestureLineWidth(int width) 设置手势线条颜色
+* setGestureLineColor(@ColorInt int color) 设置手势线条颜色
+* setGestureLineErrorColor(@ColorInt int color) 设置手势线条匹配失败时颜色
+* setAutoMatch(boolean autoMatch) 设置是否自动匹配
+* setAutoResetDelay(int delay) 设置自动匹配失败后重置时间
+* setMinSelectCount(int count) 设置最少选择点个数
+* setRightPassword(int[] rightPwd) 设置正确密码
+* setActionBarBackgroundColor(@ColorInt int color) 设置顶部栏背景色，包括状态栏和标题栏
+* setStatusBarBackgroundColor(@ColorInt int color) 设置状态栏背景颜色
+* setTitleBackgroundColor(@ColorInt int color) 设置标题栏背景颜色
+* setTitle(String title) 设置标题
+* setTitleBackButtonVisible(boolean visible) 设置是否显示标题返回按钮
+* show(@NonNull Activity activity) 进行页面跳转
+* show(@NonNull Activity activity, @NonNull Class<?> cls) 进行页面跳转
 
 # LibPwdGesture
 The library of password gesture.
