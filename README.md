@@ -1,8 +1,8 @@
 # 直接上效果图
-[ScreenCapture](https://github.com/rhinoSp/LibPwdGesture/blob/master/ScreenCapture/ScreenCapture.gif)
+![ScreenCapture](https://github.com/rhinoSp/LibPwdGesture/blob/master/ScreenCapture/ScreenCapture.gif)
 # 一、概述
 这是一个手势密码库，可以直接implementation使用，包含自定义手势密码控件[PwdGestureView.java](https://github.com/rhinoSp/LibPwdGesture/blob/master/libPwdGesture/src/main/java/com/rhino/pgv/view/PwdGestureView.java)，
-以及两个activity，创建手势密码[PwdGestureCreateActivity.java](https://github.com/rhinoSp/LibPwdGesture/blob/master/libPwdGesture/src/main/java/com/rhino/pgv/activity/PwdGestureCreateActivity.java),验证手势密码[PwdGestureInputActivity.java](https://github.com/rhinoSp/LibPwdGesture/blob/master/libPwdGesture/src/main/java/com/rhino/pgv/activity/PwdGestureInputActivity.java)。
+以及两个activity，创建手势密码[PwdGestureCreateActivity.java](https://github.com/rhinoSp/LibPwdGesture/blob/master/libPwdGesture/src/main/java/com/rhino/pgv/activity/PwdGestureCreateActivity.java)，验证手势密码[PwdGestureInputActivity.java](https://github.com/rhinoSp/LibPwdGesture/blob/master/libPwdGesture/src/main/java/com/rhino/pgv/activity/PwdGestureInputActivity.java)。
 # 二、实现原理
 很简单，就是从左到右，从上到下，一次编号为123456789，手指划过的顺序对应的编号组成手势密码，接下来不说应该也都明白了吧。具体实现方式和逻辑可以自行下载查看，下载链接见本文末尾。
 # 三、使用方法
